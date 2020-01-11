@@ -5,15 +5,23 @@ colorama.init()
 
 
 class scenery:
-    def __init__(self, rows, cols):
+    def __init__(self, player, rows, cols):
         self.rows = rows
         self.cols = cols
-        self.grid = ([[Back.BLUE + Fore.BLUE + ' ' for col in range(self.cols)]
+        self.grid = ([[Back.BLACK + Fore.BLACK + ' ' for col in range(self.cols)]
                       for row in range(self.rows)])
+        for val in range(self.cols):
+            # sky
+            if(len(player.info) > val):
+                self.grid[0][val] = Fore.YELLOW + player.info[val]
+            self.grid[1][val] = Fore.WHITE + 'X'
+            # ground
+            self.grid[self.rows - 1][val] = Fore.GREEN + 'X'
+            self.grid[self.rows - 2][val] = Fore.GREEN + 'X'
+            self.grid[self.rows - 3][val] = Fore.GREEN + 'X'
 
-        # for row in range(self.rows):
-        #     for cols in range(self.cols):
-        #         self.grid[row][cols] = Back.BLUE + Fore.BLUE + ' '
-
-    def object(self, pos_x, pos_y):
-        self.grid[pos_y][pos_x] = Fore.RED + '+'
+    def object(self, player):
+        for y in range(0, player.height):
+            for x in range(0, player.width):
+                self.grid[player.pos_y - y][player.pos_x +
+                                            x] = Fore.BLUE + player.char[player.height - 1 - y][x]
