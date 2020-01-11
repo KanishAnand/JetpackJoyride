@@ -3,7 +3,6 @@ from colorama import Fore, Back, Style
 from select import select
 import termios
 import subprocess as sp
-# import atexit
 import time
 import tty
 import sys
