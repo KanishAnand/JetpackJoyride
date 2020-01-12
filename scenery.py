@@ -13,6 +13,7 @@ class scenery:
         self.cols = cols*frames
         self.grid = ([[Back.BLACK + Fore.BLACK + ' ' for col in range(self.cols)]
                       for row in range(self.rows)])
+
         for val in range(self.cols):
             # sky
             if(len(player.info) > val):

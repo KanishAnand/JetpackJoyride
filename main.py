@@ -13,6 +13,7 @@ import os
 colorama.init()
 rows, columns = 30, 90
 frames = 6
+flag = 0
 # due to 0 based indexing of the grid
 world_x = columns - 1
 world_y = rows - 1
@@ -44,15 +45,17 @@ if __name__ == "__main__":
         output_str = ""
         for row in range(rows):
             for col in range(columns):
-                output_str += game_map.grid[row][offset + col]
+                if(row == 0):
+                    output_str += game_map.grid[row][col]
+                else:
+                    output_str += game_map.grid[row][offset + col]
             output_str += '\n'
 
         print('\033[H' + output_str)
         game_map.clear(player)
         tm = time.time()
         diff = tm - start_time
-        diff = int(diff)
-        if diff == 1:
+        if diff > 0.03:
             offset += 1
             # done so that with screen moving back player's position should remain same
             player.move('d')
