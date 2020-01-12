@@ -11,12 +11,12 @@ class Person:
         self.time = 100
         self.info = " "
 
-    def check(self, world_x, world_y):
+    def check(self, world_x, world_y, offset):
         # check for limits out of screen
-        if self.pos_x + self.width - 1 > world_x - 1:
-            self.pos_x = world_x - self.width
-        if self.pos_x < 1:
-            self.pos_x = 1
+        if self.pos_x + self.width - 1 > world_x - 1 + offset:
+            self.pos_x = world_x - self.width + offset
+        if self.pos_x < offset + 1:
+            self.pos_x = offset + 1
         if self.pos_y > world_y - 3:
             self.pos_y = world_y - 3
         if self.pos_y - self.height + 1 < 2:
@@ -31,4 +31,4 @@ class Person:
         elif(val == 'd' or val == 'D'):
             self.pos_x += 1
         elif(val == 'w' or val == 'W'):
-            self.pos_y -= 2
+            self.pos_y -= 1

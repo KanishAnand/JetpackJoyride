@@ -1,3 +1,6 @@
 1. make classes and use oops
 2. limits of out of screen
 3. make screen small not full size
+4. gravity is not working if it is going to right in air
+5. fix the top score bar
+6. condition so that coin or any object should not collide with borders (upper or lower) or with player or any other object
