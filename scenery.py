@@ -13,8 +13,10 @@ class scenery:
         self.cols = cols*frames
         self.grid = ([[Back.BLACK + Fore.BLACK + ' ' for col in range(self.cols)]
                       for row in range(self.rows)])
-        self.coins_x = []
-        self.coins_y = []
+        # self.coins_x = []
+        # self.coins_y = []
+        self.flames = []
+
         for val in range(self.cols):
             # sky
             if(len(player.info) > val):
@@ -30,14 +32,14 @@ class scenery:
             left = 1 + (cols-2)*val
             right = (cols-2)*(val+1)
             
-            no_of_coins = random.randint(3,14)
+            no_of_coins = random.randint(3,20)
 
             for val in range(no_of_coins):
                 coin1 = coins(1, 1)
                 a = random.randint(left, right)
                 b = random.randint(4, rows - 10)
-                self.coins_x.append(a)
-                self.coins_y.append(b)
+                # self.coins_x.append(a)
+                # self.coins_y.append(b)
                 coin1.pos(a, b)
                 for row in range(coin1.height):
                     for col in range(coin1.width):
@@ -70,7 +72,7 @@ class scenery:
                     b = random.randint(4 +h, rows-5)
                     flame1.pos(a, b,h)
 
-
+                self.flames.append({'x':flame1.pos_x,'y':flame1.pos_y,'angle':flame1.angle,'height':flame1.height})
                 for row in range(flame1.height):
                     if flame1.angle == 1:
                         if row == 0 or row == flame1.height - 1:

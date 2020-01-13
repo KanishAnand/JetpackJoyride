@@ -33,7 +33,6 @@ if __name__ == "__main__":
     start_time = time.time()
 
     while(1):
-        
         if input.kbhit():
             val = input.getch()
             if(val == 'q'):
@@ -44,6 +43,10 @@ if __name__ == "__main__":
             player.gravity()
 
         player.check(world_x, world_y, offset)
+        #check_coins should be before game_map.object as in check_coins we are checking if at positions there is some coin but in game_map we
+        #are rewriting that position with player
+        check_flames(game_map,player)
+        check_coins(game_map,player)
         game_map.object(player)
         # to update score lives and time everytime
         player.info = "SCORE = " + str(player.score) + "        LIVES = " + str(
@@ -61,7 +64,6 @@ if __name__ == "__main__":
                     output_str += game_map.grid[row][offset + col]
             output_str += '\n'
 
-        check_coins(game_map,player)
         print('\033[H' + output_str)
         game_map.clear(player)
         tm = time.time()

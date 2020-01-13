@@ -4,7 +4,9 @@
 4. gravity is not working if it is going to right in air
 5. fix the top score bar
 6. condition so that coin or any object should not collide with borders (upper or lower) or with player or any other object
-7. take care that no objects should collide with each other
+7. take care that no objects should collide with each other (imp)
 8. make coins 2d array
 9. increase number of coins
 10. make new file for all colors
+11. check condition of removing flames
+12. gravity
