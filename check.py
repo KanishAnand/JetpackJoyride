@@ -2,7 +2,6 @@ import colorama
 from colorama import Fore, Back, Style
 colorama.init()
 
-
 def check_coins(game_map, player):
     x = player.pos_x
     y = player.pos_y

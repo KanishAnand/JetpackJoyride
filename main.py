@@ -35,25 +35,29 @@ if __name__ == "__main__":
     while(1):
         if input.kbhit():
             val = input.getch()
-            if(val == 'q'):
+            if(val == 'q' or val == 'Q'):
                 break
-            player.move(val)
+            player.change_vel(val)
         else:
+            pass
             # use gravity when nothing is pressed
-            player.gravity()
+            # player.gravity()
 
+        # player.gravity += player.dy
+        player.vely += player.gravity
+        player.change_pos()
         player.check(world_x, world_y, offset)
-        #check_coins should be before game_map.object as in check_coins we are checking if at positions there is some coin but in game_map we
-        #are rewriting that position with player
-        check_flames(game_map,player)
-        check_coins(game_map,player)
+        # check_coins should be before game_map.object as in check_coins we are checking if at positions there is some coin but in game_map we
+        # are rewriting that position with player
+        check_flames(game_map, player)
+        check_coins(game_map, player)
         game_map.object(player)
         # to update score lives and time everytime
         player.info = "SCORE = " + str(player.score) + "        LIVES = " + str(
-        player.lives) + "       TIME LEFT= " + str(player.time)
+            player.lives) + "       TIME LEFT= " + str(player.time)
         for val in range(columns):
             if(len(player.info) > val):
-                    game_map.grid[0][val] = Fore.YELLOW + player.info[val]
+                game_map.grid[0][val] = Fore.YELLOW + player.info[val]
         output_str = ""
         for row in range(rows):
             for col in range(columns):
@@ -71,13 +75,16 @@ if __name__ == "__main__":
         if diff > 0.04:
             offset += 1
             # done so that with screen moving back player's position should remain same
-            player.move('d')
+            player.velx += 1
+            player.change_pos()
             start_time = tm
 
         # bring cursor to start instead of clearing the full screen
+        player.velx = 0
+        # player.vely = 0
         sys.stdin.flush()
         sys.stdout.flush()
-        time.sleep(0.03)
+        time.sleep(0.02)
 
     input.show_cursor()
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, orig_settings)
