@@ -19,6 +19,7 @@ class coins:
 class flame:
     def __init__(self):
         self.width = 1
+        self.active = 1
         # pos = 0 --> horizontal
         # pos = 1 --> vertical
         # pos = 2 --> at 45 angle
@@ -32,3 +33,20 @@ class flame:
 
     def angle(self, angle):
         self.angle = angle
+
+
+class shoot:
+    def __init__(self, x, y, lim):
+        # if this bullet is finished or not
+        self.active = 1
+        self.vel = 5
+        self.height = 2
+        self.width = 3
+        self.limit = lim - self.width
+        self.pos_x = x
+        self.pos_y = y
+        self.color = Fore.CYAN
+        self.char = ([['*' for col in range(self.width)]
+                      for row in range(self.height)])
+        # self.pos_x = x
+        # self.pos_y = y

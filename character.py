@@ -1,3 +1,7 @@
+import colorama
+from colorama import Fore, Back, Style
+colorama.init()
+
 class Person:
     def __init__(self, world_x, world_y):
         # pos_x and pos_y represent coordinates of bottom left point of figure
@@ -7,9 +11,10 @@ class Person:
         self.width = 3
         self.velx = 0
         self.vely = 0
-        self.gravity = 0.05
+        self.gravity = 0.1
         # self.dy = 0.0013
         self.char = [[' ', '0', ' '], ['-', '|', '-'], ['/', '|', '\\']]
+        self.color = Fore.BLUE
         self.lives = 3
         self.score = 0
         self.time = 100
@@ -26,7 +31,7 @@ class Person:
             self.vely = 0
         if self.pos_y - self.height + 1 <= 2:
             self.pos_y = self.height + 1
-            # here self.vely is made 1 to give it downward force else it got stuck at top as always gravity rounds to 0 and here vely becomes 0
+            # here self.pos_y is made 1 to give it downward force else it got stuck at top as always gravity rounds to 0 and here vely becomes 0
             self.vely = 0
             self.pos_y += 1
 
