@@ -72,7 +72,7 @@ def check_flames(game_map, player):
                         Fore.BLACK + ' '
 
 
-def check_flames_bullets(bullets, game_map):
+def check_flames_bullets(bullets, game_map, player):
     for blt in bullets:
         if blt.active == 0:
             continue
@@ -95,7 +95,9 @@ def check_flames_bullets(bullets, game_map):
                 if fbottom_y <= bottom_y and fbottom_y >= top_y:
                     if (left_x <= fleft_x and right_x >= fleft_x) or (left_x >= fleft_x and right_x <= fright_x) or (left_x <= fright_x and right_x >= fright_x):
                         flm.active = 0
-                        # blt.active = 0
+                        blt.active = 0
+                        player.score += flm.hitscore
+                        game_map.clear(blt)
                         for ind in range(flm.height):
                             game_map.grid[fbottom_y][fleft_x + ind] = Back.BLACK + \
                                 Fore.BLACK + ' '
@@ -104,7 +106,9 @@ def check_flames_bullets(bullets, game_map):
                 if fleft_x >= left_x and fright_x <= right_x:
                     if (bottom_y >= fbottom_y and top_y <= fbottom_y) or (bottom_y <= fbottom_y and top_y >= ftop_y) or (bottom_y >= ftop_y and top_y <= ftop_y):
                         flm.active = 0
-                        # blt.active = 0
+                        blt.active = 0
+                        player.score += flm.hitscore
+                        game_map.clear(blt)
                         for ind in range(flm.height):
                             game_map.grid[fbottom_y - ind][fleft_x] = Back.BLACK + \
                                 Fore.BLACK + ' '
@@ -122,11 +126,9 @@ def check_flames_bullets(bullets, game_map):
 
                 if flag == 1:
                     flm.active = 0
-                    # blt.active = 0
+                    blt.active = 0
+                    player.score += flm.hitscore
+                    game_map.clear(blt)
                     for ind in range(flm.height):
                         game_map.grid[fbottom_y-ind][fleft_x+ind] = Back.BLACK + \
-                        Fore.BLACK + ' '
-
-             
-             
-
+                            Fore.BLACK + ' '

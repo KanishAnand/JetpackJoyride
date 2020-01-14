@@ -3,6 +3,7 @@ import random
 import colorama
 from colorama import Fore, Back, Style
 from objects import coins, flame
+from character import BossEnemy
 colorama.init()
 
 
@@ -13,8 +14,6 @@ class scenery:
         self.cols = cols*frames
         self.grid = ([[Back.BLACK + Fore.BLACK + ' ' for col in range(self.cols)]
                       for row in range(self.rows)])
-        # self.coins_x = []
-        # self.coins_y = []
         self.flames = []
 
         for val in range(self.cols):
@@ -27,12 +26,13 @@ class scenery:
             self.grid[self.rows - 2][val] = Fore.GREEN + 'X'
             self.grid[self.rows - 3][val] = Fore.GREEN + 'X'
 
-        for val in range(frames):
+        for ind in range(frames):
             # take care of random position so that it should not collide with upper border or lower border and other objects like player also
-            left = 1 + (cols-2)*val
-            right = (cols-2)*(val+1)
+            left = 1 + (cols-2)*ind
+            right = (cols-2)*(ind+1)
 
-            no_of_coins = random.randint(3, 20)
+            # COINS
+            no_of_coins = random.randint(3, 30)
 
             for val in range(no_of_coins):
                 coin1 = coins(1, 1)
@@ -42,7 +42,7 @@ class scenery:
                 for row in range(coin1.height):
                     for col in range(coin1.width):
                         self.grid[b - row][a + col] = coin1.color
-
+            # FLAMES
             no_of_flames = random.randint(1, 3)
             prevx = 0
             prevy = 0

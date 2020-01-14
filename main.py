@@ -2,7 +2,7 @@ import colorama
 from colorama import Fore, Back, Style
 from scenery import scenery
 from input import input
-from character import Person
+from character import Person, BossEnemy
 from objects import shoot
 import termios
 from check import *
@@ -15,7 +15,6 @@ import os
 colorama.init()
 rows, columns = 30, 90
 frames = 6
-flag = 0
 # due to 0 based indexing of the grid
 world_x = columns - 1
 world_y = rows - 1
@@ -25,6 +24,7 @@ if __name__ == "__main__":
     orig_settings = termios.tcgetattr(sys.stdin)
     tty.setcbreak(sys.stdin)
     player = Person(world_x, world_y)
+    bossenemy = BossEnemy(world_x*frames, world_y)
     input = input()
     input.hide_cursor()
     offset = 0
@@ -60,10 +60,16 @@ if __name__ == "__main__":
         # check_coins should be before game_map.object as in check_coins we are checking if at positions there is some coin but in game_map we
         # are rewriting that position with player
 
-        check_flames_bullets(bullets, game_map)
+        check_flames_bullets(bullets, game_map, player)
         check_flames(game_map, player)
         check_coins(game_map, player)
         game_map.object(player)
+
+        # to adjust position of boss enemy according to player's position
+        if int(offset/((frames-2)*columns)) > 0:
+            bossenemy.change_pos(player.pos_y)
+            game_map.object(bossenemy)
+
         # to update score lives and time everytime
         player.info = "SCORE = " + str(player.score) + "        LIVES = " + str(
             player.lives) + "       TIME LEFT= " + str(player.time)
@@ -87,10 +93,14 @@ if __name__ == "__main__":
             if val.active == 1:
                 game_map.clear(val)
                 val.pos_x += 2
+
         game_map.clear(player)
+        if int(offset/((frames-2)*columns)) > 0:
+            game_map.clear(bossenemy)
+
         tm = time.time()
         diff = tm - start_time
-        if diff > 0.04:
+        if diff > 0.04 and offset < columns*(frames-1):
             offset += 1
             # done so that with screen moving back player's position should remain same
             player.velx += 1

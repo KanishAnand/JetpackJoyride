@@ -20,6 +20,7 @@ class flame:
     def __init__(self):
         self.width = 1
         self.active = 1
+        self.hitscore = 5
         # pos = 0 --> horizontal
         # pos = 1 --> vertical
         # pos = 2 --> at 45 angle
