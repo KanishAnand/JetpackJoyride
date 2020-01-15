@@ -1,6 +1,7 @@
 import numpy as np
 import colorama
 from colorama import Fore, Back, Style
+from objects import boss_shoot
 colorama.init()
 
 
@@ -15,11 +16,17 @@ class Person:
         self.vely = 0
         self.gravity = 0.1
         self.char = [[' ', '0', ' '], ['-', '|', '-'], ['/', '|', '\\']]
+        # self.char = [[' ', '0', ' '], ['/', '0', '\\'], ['/', ' ', '\\']]
         self.color = Fore.BLUE
+        self.shieldactive_color = Fore.MAGENTA
         self.lives = 3
         self.score = 0
         self.time = 100
         self.info = " "
+        self.speedboost = 0
+        self.shield = 0
+        self.shield_time = 0
+        self.prev_shield_occur = -100
 
     def check(self, world_x, world_y, offset):
         # check for limits out of screen
@@ -56,8 +63,10 @@ class BossEnemy:
     def __init__(self, x, y):
         self.color = Fore.RED
         self.active = 1
-        self.vel_x = 2
+        self.vel_x = -5
         self.cnt = 0
+        self.life = 10
+        self.bullets = []
         self.make_arr(x, y)
 
     def make_arr(self, x, y):
@@ -82,12 +91,13 @@ class BossEnemy:
             for j in range(len(arr[i])-1):
                 self.char[i][j] = chr(arr[i][j])
 
-    def change_pos(self, player_pos_y):
+    def change_pos(self, limit_x, player_pos_y, rows):
         self.pos_y = max(player_pos_y, self.height+2)
         self.cnt += 1
-        if self.cnt % 83 == 0:
+        if self.cnt % 30 == 0:
             self.pos_x += self.vel_x
-            if self.vel_x == 2:
-                self.vel_x = -2
-            else:
-                self.vel_x = 2
+            if(self.pos_x < limit_x):
+                self.pos_x = limit_x
+            blt = boss_shoot(self.pos_x, self.pos_y -
+                             self.height + 10, limit_x, rows)
+            self.bullets.append(blt)

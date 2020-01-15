@@ -39,7 +39,8 @@ def check_flames(game_map, player):
             # check condition
             if fy <= y and fy >= y - player.height + 1:
                 if (fx >= x and fx <= x + player.width - 1) or (fx <= x and fx + h - 1 >= x + player.width - 1) or (x <= fx + h - 1 and fx + h - 1 <= x + player.width - 1):
-                    player.lives -= 1
+                    if player.shield == 0:
+                        player.lives -= 1
                     val.active = 0
                     for ind in range(h):
                         game_map.grid[fy][fx+ind] = Back.BLACK + \
@@ -48,7 +49,8 @@ def check_flames(game_map, player):
         elif ang == 1:
             if fx >= x and fx <= x + player.width - 1:
                 if (y >= fy and y - player.height + 1 <= fy) or (y <= fy and y - player.height + 1 >= fy - h + 1) or (y >= fy - h + 1 and y - player.height + 1 <= fy - h + 1):
-                    player.lives -= 1
+                    if player.shield == 0:
+                        player.lives -= 1
                     val.active = 0
                     for ind in range(h):
                         game_map.grid[fy-ind][fx] = Back.BLACK + \
@@ -65,7 +67,8 @@ def check_flames(game_map, player):
                 fx += 1
                 fy -= 1
             if flag == 1:
-                player.lives -= 1
+                if player.shield == 0:
+                    player.lives -= 1
                 val.active = 0
                 for ind in range(h):
                     game_map.grid[oy-ind][ox+ind] = Back.BLACK + \
@@ -132,3 +135,88 @@ def check_flames_bullets(bullets, game_map, player):
                     for ind in range(flm.height):
                         game_map.grid[fbottom_y-ind][fleft_x+ind] = Back.BLACK + \
                             Fore.BLACK + ' '
+
+
+def check_player_bossenemy(player, bossenemy):
+    if player.pos_x >= bossenemy.pos_x:
+        if player.shield == 0:
+            player.lives -= 1
+
+
+def check_bossenemy_bullets(bullets, bossenemy, game_map):
+    for blt in bullets:
+        if blt.active == 0:
+            continue
+
+        if blt.pos_y <= bossenemy.pos_y and blt.pos_y >= bossenemy.pos_y - bossenemy.height + 1:
+            if blt.pos_x >= bossenemy.pos_x:
+                bossenemy.life -= 1
+                if bossenemy.color == Fore.RED:
+                    bossenemy.color = Fore.MAGENTA
+                else:
+                    bossenemy.color = Fore.RED
+                blt.active = 0
+                game_map.clear(blt)
+
+
+def check_player_bossenemybullets(game_map, player, bossenemy):
+    bottom_y = player.pos_y
+    top_y = player.pos_y - player.height + 1
+    left_x = player.pos_x
+    right_x = player.pos_x + player.width - 1
+    flag = 0
+    for blt in bossenemy.bullets:
+        if blt.active == 0:
+            continue
+        x = blt.pos_x
+        y = blt.pos_y
+        for i in range(blt.height):
+            for j in range(blt.width):
+                x = blt.pos_x + j
+                y = blt.pos_y - i
+                if(y >= top_y and y <= bottom_y and x <= right_x and x >= left_x):
+                    flag = 1
+                    game_map.clear(blt)
+                    blt.active = 0
+                    break
+            if flag == 1:
+                break
+        if flag == 1:
+            break
+    if flag == 1:
+        player.lives -= 1
+
+
+def check_coll_matrix(mtrx1, mtrx2):
+    lst = []
+    flag = 0
+    for i in range(mtrx1.height):
+        for j in range(mtrx1.width):
+            a = mtrx1.pos_y - i
+            b = mtrx1.pos_x + j
+            lst.append([a, b])
+
+        for i in range(mtrx2.height):
+            for j in range(mtrx2.width):
+                a = mtrx2.pos_y - i
+                b = mtrx2.pos_x + j
+                if [a, b] in lst:
+                    flag = 1
+                    break
+            if flag == 1:
+                break
+        if flag == 1:
+            break
+    if flag == 1:
+        return True
+
+
+def check_player_speed_boost(game_map, player):
+    val = 0
+    for spd in game_map.speedboost:
+        val = check_coll_matrix(spd, player)
+        if val == 1:
+            player.speedboost = 1
+            game_map.speedboost_active = 1
+            game_map.clear(spd)
+            break
