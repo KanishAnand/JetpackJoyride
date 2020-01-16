@@ -55,7 +55,7 @@ class boss_shoot:
     def __init__(self, x, y, lim, rows):
         # if this bullet is finished or not
         self.active = 1
-        self.vel_x = 3
+        self.vel_x = 9
         self.vel_y = 1
         self.height = 3
         self.width = 3

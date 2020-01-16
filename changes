@@ -25,4 +25,7 @@
 25. player should be effected by magnet if shield is active ?
 26. check collision of objects
 27. color gots spread of flame if coin collides with it
-28. bullets are hitting coins too
+28. bullets are hitting coins and shield and magnet too
+29. not able to reach topmost point
+30. adjust velocity of dragon ice ball
+31. we can hit magnet or superpower with bullets

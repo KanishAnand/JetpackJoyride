@@ -39,9 +39,10 @@ if __name__ == "__main__":
     start_time = time.time()
     bullets = []
     global_time = time.time()
+    gtime = time.time()
 
     while(1):
-        if offset >= (frames-1)*(columns-3):
+        if offset >= (frames-1)*(columns) - 2:
             offset_inc = 0
             fast_offset_inc = 0
 
@@ -91,7 +92,9 @@ if __name__ == "__main__":
                         player.velx += 1
             game_map.objectm(game_map.magnet[0])
 
-        player.vely += player.gravity
+        if time.time() - gtime >= 0.022:
+            player.vely += player.gravity
+            gtime = time.time()
         player.change_pos()
         player.check(world_x, world_y, offset)
         if game_map.mgnt_pos_x >= offset and game_map.mgnt_pos_x <= columns + offset:

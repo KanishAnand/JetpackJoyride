@@ -63,7 +63,7 @@ class BossEnemy:
     def __init__(self, x, y):
         self.color = Fore.RED
         self.active = 1
-        self.vel_x = -5
+        self.vel_x = 0
         self.cnt = 0
         self.life = 10
         self.bullets = []

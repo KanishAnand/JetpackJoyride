@@ -10,7 +10,6 @@ colorama.init()
 class scenery:
     def __init__(self, player, rows, cols, frames):
         self.rows = rows
-        # 6 frames
         self.cols = cols*frames
         self.grid = ([[Back.BLACK + Fore.BLACK + ' ' for col in range(self.cols)]
                       for row in range(self.rows)])
@@ -32,84 +31,102 @@ class scenery:
         magnet_frame = random.randint(4, frames-2)
         speedboost_frame = random.randint(2, 2)
 
-        for ind in range(frames):
+        for ind in range(frames-1):
             # take care of random position so that it should not collide with upper border or lower border and other objects like player also
             left = 1 + (cols-2)*ind
             right = (cols-2)*(ind+1)
 
-            # FLAMES
             no_of_flames = random.randint(1, 7)
-            prevx = 0
-            prevy = 0
-            for val in range(no_of_flames):
-                flame1 = flame()
-                angle = random.randint(0, 2)
-                if angle == 0:
-                    # horizontal
-                    h = 15
-                    if(prevx + left > right-h-2):
-                        continue
-                    flame1.angle(0)
-                    a = random.randint(prevx + left, right-h-2)
-                    b = random.randint(4, rows-5)
-                    flame1.pos(a, b, h)
-                elif angle == 1:
-                    # vertical
-                    h = 6
-                    if(prevx + left > right):
-                        continue
-                    flame1.angle(1)
-                    a = random.randint(prevx + left, right)
-                    b = random.randint(4 + h, rows - 5)
-                    flame1.pos(a, b, h)
-                else:
-                    # 45 degree
-                    h = 7
-                    if(prevx + left > right-h-2):
-                        continue
-                    flame1.angle(2)
-                    a = random.randint(prevx + left, right - h - 2)
-                    b = random.randint(4 + h, rows-5)
-                    flame1.pos(a, b, h)
+            no_of_coins = random.randint(3, 30)
+            prevx_coins = 1
+            prevx_flames = 1
 
-                self.flames.append(flame1)
-                for row in range(flame1.height):
-                    if flame1.angle == 1:
-                        prevx = a + 3
-                        if row == 0 or row == flame1.height - 1:
-                            self.grid[b-row][a] = flame1.color_corners
-                        else:
-                            self.grid[b-row][a] = flame1.color_fill
+            while(no_of_coins != 0 and no_of_flames != 0):
+                # COINS
+                if no_of_coins != 0:
+                    h = random.randint(1, 3)
+                    w = random.randint(12, 25)
+                    coin1 = coins(h, w)
+                    if prevx_coins > right - w - 1:
+                        no_of_coins -= 1
+                        continue
+                    a = random.randint(max(left, prevx_coins), right - w - 1)
+                    b = random.randint(4, 11)
+                    prevx_coins = a + w + 2
+                    coin1.pos(a, b)
+                    for row in range(coin1.height):
+                        for col in range(coin1.width):
+                            self.grid[b - row][a + col] = coin1.color
+                    no_of_coins -= 1
 
-                    elif flame1.angle == 0:
-                        prevx = a + flame1.height
-                        if row == 0 or row == flame1.height - 1:
-                            self.grid[b][a+row] = flame1.color_corners
-                        else:
-                            self.grid[b][a+row] = flame1.color_fill
+                # FLAMES
+                if no_of_flames != 0:
+                    flame1 = flame()
+                    angle = random.randint(0, 2)
+                    if angle == 0:
+                        # horizontal
+                        h = 15
+                        if(prevx_flames > right-h-2):
+                            no_of_flames -= 1
+                            continue
+                        flame1.angle(0)
+                        a = random.randint(max(left, prevx_flames), right-h-2)
+                        b = random.randint(12, rows-5)
+                        prevx_flames = a + h + 5
+                        flame1.pos(a, b, h)
+                    elif angle == 1:
+                        # vertical
+                        h = 6
+                        if(prevx_flames > right):
+                            no_of_flames -= 1
+                            continue
+                        flame1.angle(1)
+                        a = random.randint(max(left, prevx_flames), right)
+                        b = random.randint(10 + h, rows - 5)
+                        prevx_flames = a + 5
+                        flame1.pos(a, b, h)
                     else:
-                        prevx = a + flame1.height
-                        if row == 0 or row == flame1.height - 1:
-                            self.grid[b-row][a+row] = flame1.color_corners
+                        # 45 degree
+                        h = 7
+                        if(prevx_flames > right-h-2):
+                            no_of_flames -= 1
+                            continue
+                        flame1.angle(2)
+                        a = random.randint(
+                            max(left, prevx_flames), right - h - 2)
+                        b = random.randint(10 + h, rows-5)
+                        prevx_flames = a + h + 5
+                        flame1.pos(a, b, h)
+
+                    self.flames.append(flame1)
+                    for row in range(flame1.height):
+                        if flame1.angle == 1:
+                            if row == 0 or row == flame1.height - 1:
+                                self.grid[b-row][a] = flame1.color_corners
+                            else:
+                                self.grid[b-row][a] = flame1.color_fill
+
+                        elif flame1.angle == 0:
+                            if row == 0 or row == flame1.height - 1:
+                                self.grid[b][a+row] = flame1.color_corners
+                            else:
+                                self.grid[b][a+row] = flame1.color_fill
                         else:
-                            self.grid[b-row][a+row] = flame1.color_fill
+                            if row == 0 or row == flame1.height - 1:
+                                self.grid[b-row][a+row] = flame1.color_corners
+                            else:
+                                self.grid[b-row][a+row] = flame1.color_fill
 
-            # COINS
-            no_of_coins = random.randint(3, 6)
-
-            for val in range(no_of_coins):
-                coin1 = coins(random.randint(1, 3), random.randint(12, 25))
-                a = random.randint(left, right)
-                b = random.randint(4, rows - 10)
-                coin1.pos(a, b)
-                for row in range(coin1.height):
-                    for col in range(coin1.width):
-                        self.grid[b - row][a + col] = coin1.color
+                    no_of_flames -= 1
 
             # MAGNET
             if ind == magnet_frame:
-                a = random.randint(left, right)
-                b = random.randint(5, rows - 24)
+                if(prevx_coins <= right):
+                    a = random.randint(prevx_coins, right+4)
+                else:
+                    a = random.randint(prevx_coins, right)
+                b = random.randint(4, 12)
+                prevx_coins = a + 2
                 self.mgnt_frame = magnet_frame
                 self.mgnt_rangex = 40
                 self.mgnt_pos_x = a
@@ -132,8 +149,12 @@ class scenery:
 
             # SPEEDBOOST
             if ind == speedboost_frame:
-                a = random.randint(left, right)
-                b = random.randint(5, rows - 20)
+                if(prevx_coins <= right):
+                    a = random.randint(prevx_coins, right+4)
+                else:
+                    a = random.randint(prevx_coins, right)
+                b = random.randint(4, 12)
+                prevx_coins = a + 2
                 spd = speedboost(a, b, speedboost_frame)
                 self.speedboost.append(spd)
                 for i in range(spd.height):
