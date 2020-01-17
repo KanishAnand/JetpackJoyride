@@ -17,6 +17,7 @@ class scenery:
         self.speedboost = []
         self.speedboost_active = 0
         self.magnet = []
+        self.coins_limit = 14
 
         for val in range(self.cols):
             # sky
@@ -47,11 +48,11 @@ class scenery:
                     h = random.randint(1, 3)
                     w = random.randint(12, 25)
                     coin1 = coins(h, w)
-                    if prevx_coins > right - w - 1:
+                    if max(left, prevx_coins) > right - w - 1:
                         no_of_coins -= 1
                         continue
                     a = random.randint(max(left, prevx_coins), right - w - 1)
-                    b = random.randint(4, 11)
+                    b = random.randint(4, self.coins_limit)
                     prevx_coins = a + w + 2
                     coin1.pos(a, b)
                     for row in range(coin1.height):
@@ -66,35 +67,35 @@ class scenery:
                     if angle == 0:
                         # horizontal
                         h = 15
-                        if(prevx_flames > right-h-2):
+                        if(max(left, prevx_flames) > right-h-2):
                             no_of_flames -= 1
                             continue
                         flame1.angle(0)
                         a = random.randint(max(left, prevx_flames), right-h-2)
-                        b = random.randint(12, rows-5)
+                        b = random.randint(self.coins_limit + 2, rows-5)
                         prevx_flames = a + h + 5
                         flame1.pos(a, b, h)
                     elif angle == 1:
                         # vertical
                         h = 6
-                        if(prevx_flames > right):
+                        if(max(left, prevx_flames) > right):
                             no_of_flames -= 1
                             continue
                         flame1.angle(1)
                         a = random.randint(max(left, prevx_flames), right)
-                        b = random.randint(10 + h, rows - 5)
+                        b = random.randint(self.coins_limit + h + 2, rows - 5)
                         prevx_flames = a + 5
                         flame1.pos(a, b, h)
                     else:
                         # 45 degree
                         h = 7
-                        if(prevx_flames > right-h-2):
+                        if(max(left, prevx_flames) > right-h-2):
                             no_of_flames -= 1
                             continue
                         flame1.angle(2)
                         a = random.randint(
                             max(left, prevx_flames), right - h - 2)
-                        b = random.randint(10 + h, rows-5)
+                        b = random.randint(self.coins_limit + h + 2, rows-5)
                         prevx_flames = a + h + 5
                         flame1.pos(a, b, h)
 
@@ -121,11 +122,11 @@ class scenery:
 
             # MAGNET
             if ind == magnet_frame:
-                if(prevx_coins <= right):
-                    a = random.randint(prevx_coins, right+4)
+                if(prevx_coins > right):
+                    a = random.randint(prevx_coins, right+5)
                 else:
                     a = random.randint(prevx_coins, right)
-                b = random.randint(4, 12)
+                b = random.randint(4, self.coins_limit)
                 prevx_coins = a + 2
                 self.mgnt_frame = magnet_frame
                 self.mgnt_rangex = 40
@@ -149,11 +150,11 @@ class scenery:
 
             # SPEEDBOOST
             if ind == speedboost_frame:
-                if(prevx_coins <= right):
-                    a = random.randint(prevx_coins, right+4)
+                if(prevx_coins > right):
+                    a = random.randint(prevx_coins, right+5)
                 else:
                     a = random.randint(prevx_coins, right)
-                b = random.randint(4, 12)
+                b = random.randint(4, self.coins_limit)
                 prevx_coins = a + 2
                 spd = speedboost(a, b, speedboost_frame)
                 self.speedboost.append(spd)

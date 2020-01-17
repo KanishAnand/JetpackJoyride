@@ -4,6 +4,7 @@ from scenery import scenery
 from input import input
 from character import Person, BossEnemy
 from objects import shoot
+from game_over import *
 import termios
 from check import *
 import subprocess as sp
@@ -42,6 +43,24 @@ if __name__ == "__main__":
     gtime = time.time()
 
     while(1):
+        if bossenemy.life <= 0 and player.lives != 0 and player.time != 0:
+            won(game_map, offset, rows, columns)
+            output_str = ""
+            for row in range(rows):
+                for col in range(columns):
+                    output_str += game_map.grid[row][offset + col]
+                output_str += '\n'
+            print('\033[H' + output_str)
+            break
+        if player.lives <= 0 or player.time == 0:
+            loose(game_map, offset, rows, columns)
+            output_str = ""
+            for row in range(rows):
+                for col in range(columns):
+                    output_str += game_map.grid[row][offset + col]
+                output_str += '\n'
+            print('\033[H' + output_str)
+            break
         if offset >= (frames-1)*(columns) - 2:
             offset_inc = 0
             fast_offset_inc = 0
@@ -115,9 +134,6 @@ if __name__ == "__main__":
             check_player_bossenemy(player, bossenemy)
             check_bossenemy_bullets(bullets, bossenemy, game_map)
             check_player_bossenemybullets(game_map, player, bossenemy)
-            if(bossenemy.life <= 0):
-                print("BOSS enemey died")
-                break
         check_flames_bullets(bullets, game_map, player)
         check_flames(game_map, player)
         check_coins(game_map, player)
