@@ -15,6 +15,7 @@ class scenery:
                       for row in range(self.rows)])
         self.flames = []
         self.speedboost = []
+        self.dragon = []
         self.speedboost_active = 0
         self.magnet = []
         self.coins_limit = 14
@@ -29,8 +30,9 @@ class scenery:
             self.grid[self.rows - 2][val] = Fore.GREEN + 'X'
             self.grid[self.rows - 3][val] = Fore.GREEN + 'X'
 
-        magnet_frame = random.randint(4, frames-2)
-        speedboost_frame = random.randint(2, 2)
+        magnet_frame = random.randint(8, frames-2)
+        speedboost_frame = random.randint(2, 4)
+        dragon_frame = random.randint(5, 6)
 
         for ind in range(frames-1):
             # take care of random position so that it should not collide with upper border or lower border and other objects like player also
@@ -158,6 +160,27 @@ class scenery:
                 prevx_coins = a + 2
                 spd = speedboost(a, b, speedboost_frame)
                 self.speedboost.append(spd)
+                for i in range(spd.height):
+                    for j in range(spd.width):
+                        if (b - i + a + j) % 2 == 0:
+                            self.grid[b-i][a+j] = spd.color1 + \
+                                spd.char[spd.height - 1 - i][j]
+                        else:
+                            self.grid[b-i][a+j] = spd.color2 + \
+                                spd.char[spd.height - 1 - i][j]
+                self.grid[b-1][a+1] = spd.transp
+                self.grid[b-1][a+2] = spd.transp
+
+            # DRAGON
+            if ind == dragon_frame:
+                if(prevx_coins > right):
+                    a = random.randint(prevx_coins, right+5)
+                else:
+                    a = random.randint(prevx_coins, right)
+                b = random.randint(4, self.coins_limit)
+                prevx_coins = a + 2
+                spd = dragon(a, b, speedboost_frame)
+                self.dragon.append(spd)
                 for i in range(spd.height):
                     for j in range(spd.width):
                         if (b - i + a + j) % 2 == 0:

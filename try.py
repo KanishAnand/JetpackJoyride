@@ -6,7 +6,7 @@ class BossEnemy:
         self.make_arr()
 
     def make_arr(self):
-        with open('BossEnemy.txt', 'rb') as f:
+        with open('dragon1.txt', 'rb') as f:
             arr = []
             cnt = 0
             mx = -1
@@ -27,8 +27,6 @@ class BossEnemy:
 
 
 en = BossEnemy()
-print(en.char)
-print(en.char.shape)
 for i in range(en.char.shape[0]):
     for j in range(en.char.shape[1]):
         print(en.char[i][j], end=" ")

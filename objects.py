@@ -92,3 +92,17 @@ class speedboost:
         self.transp = Back.BLACK + Fore.BLACK + ' '
         self.char = [[' ', ' ', ' ', ' '],
                      [' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ']]
+
+
+class dragon:
+    def __init__(self, x, y, frm):
+        self.pos_x = x
+        self.pos_y = y
+        self.height = 3
+        self.width = 4
+        self.dragon_frame = frm
+        self.color1 = Back.YELLOW + Fore.BLACK
+        self.color2 = Back.RED + Fore.BLACK
+        self.transp = Back.BLACK + Fore.BLACK + ' '
+        self.char = [[' ', ' ', ' ', ' '],
+                     [' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ']]

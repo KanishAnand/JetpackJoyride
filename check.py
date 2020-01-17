@@ -40,6 +40,7 @@ def check_flames(game_map, player):
             if fy <= y and fy >= y - player.height + 1:
                 if (fx >= x and fx <= x + player.width - 1) or (fx <= x and fx + h - 1 >= x + player.width - 1) or (x <= fx + h - 1 and fx + h - 1 <= x + player.width - 1):
                     if player.shield == 0:
+                        player.dragon = 0
                         player.lives -= 1
                     val.active = 0
                     for ind in range(h):
@@ -50,6 +51,7 @@ def check_flames(game_map, player):
             if fx >= x and fx <= x + player.width - 1:
                 if (y >= fy and y - player.height + 1 <= fy) or (y <= fy and y - player.height + 1 >= fy - h + 1) or (y >= fy - h + 1 and y - player.height + 1 <= fy - h + 1):
                     if player.shield == 0:
+                        player.dragon = 0
                         player.lives -= 1
                     val.active = 0
                     for ind in range(h):
@@ -68,6 +70,7 @@ def check_flames(game_map, player):
                 fy -= 1
             if flag == 1:
                 if player.shield == 0:
+                    player.dragon = 0
                     player.lives -= 1
                 val.active = 0
                 for ind in range(h):
@@ -218,5 +221,15 @@ def check_player_speed_boost(game_map, player):
         if val == 1:
             player.speedboost = 1
             game_map.speedboost_active = 1
+            game_map.clear(spd)
+            break
+
+
+def check_player_dragon(game_map, player):
+    val = 0
+    for spd in game_map.dragon:
+        val = check_coll_matrix(spd, player)
+        if val == 1:
+            player.dragon = 1
             game_map.clear(spd)
             break

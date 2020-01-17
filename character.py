@@ -15,6 +15,8 @@ class Person:
         self.velx = 0
         self.vely = 0
         self.gravity = 0.1
+        self.dragon = 0
+        self.cnt = 0
         self.char = [[' ', '0', ' '], ['-', '|', '-'], ['/', '|', '\\']]
         # self.char = [[' ', '0', ' '], ['/', '0', '\\'], ['/', ' ', '\\']]
         self.color = Fore.BLUE
@@ -37,14 +39,11 @@ class Person:
         if self.pos_y >= world_y - 3:
             self.pos_y = world_y - 3
             self.vely = 0
-        if self.pos_y - self.height + 1 <= 2:
+        if self.pos_y - self.height + 1 < 2:
             self.pos_y = self.height + 1
             # here self.pos_y is made 1 to give it downward force else it got stuck at top as always gravity rounds to 0 and here vely becomes 0
             self.vely = 0
             self.pos_y += 1
-
-    # def gravity(self):
-    #     self.pos_y += 2
 
     def change_vel(self, val):
         if(val == 'a' or val == 'A'):
@@ -57,6 +56,27 @@ class Person:
     def change_pos(self):
         self.pos_x += round(self.velx)
         self.pos_y += round(self.vely)
+
+
+def dragon(self, filename):
+    with open(filename, 'rb') as f:
+        arr = []
+        cnt = 0
+        mx = -1
+        for line in f:
+            arr.append(line)
+            mx = max(mx, len(arr[cnt]))
+            cnt += 1
+    f.close()
+    self.height = len(arr)
+    self.width = mx
+    self.char = np.array(([[' ' for col in range(self.width)]
+                           for row in range(self.height)]))
+
+    for i in range(self.height):
+        # to remove last '\n' character in ascii art present already I have made loop till len(arr[i]) - 1
+        for j in range(len(arr[i])-1):
+            self.char[i][j] = chr(arr[i][j])
 
 
 class BossEnemy:

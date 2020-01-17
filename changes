@@ -1,32 +1,17 @@
 1. make classes and use oops
-2. limits of out of screen
-3. make screen small not full size
 4. gravity is not working if it is going to right in air
-5. fix the top score bar
-6. condition so that coin or any object should not collide with borders (upper or lower) or with player or any other object
-7. take care that no objects should collide with each other (imp)
-8. make coins 2d array
-9. increase number of coins
 10. make new file for all colors
 11. check condition of removing flames
 12. gravity
 13. bullet is removing coins
-14. position of bullets
 15. inheritence
-16 . score for bulleting flame
-17. collision bw coin and flames
 18. sound
-19. condition so that no flame  or coin intersect the boss enemy
-20. magnet should not collides with other objects
-21. take care that no two objects collide with each other
-22. if player touches magnet 
 23. condition of hitting bullet to bossenemy is not correct
 24. player can sometimes shoot bullets to sky also in this remove that
-25. player should be effected by magnet if shield is active ?
-26. check collision of objects
-27. color gots spread of flame if coin collides with it
 28. bullets are hitting coins and shield and magnet too
 29. not able to reach topmost point
 30. adjust velocity of dragon ice ball
 31. we can hit magnet or superpower with bullets
 32. change y range of coins from 1 -5 to 1 - screen rows mid
+33. bullets are sometimes hitting sky
+34. pause after one life is lost

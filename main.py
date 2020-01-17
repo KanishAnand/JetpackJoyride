@@ -2,7 +2,7 @@ import colorama
 from colorama import Fore, Back, Style
 from scenery import scenery
 from input import input
-from character import Person, BossEnemy
+from character import *
 from objects import shoot
 from game_over import *
 import termios
@@ -45,6 +45,15 @@ if __name__ == "__main__":
     while(1):
         if bossenemy.life <= 0 and player.lives != 0 and player.time != 0:
             won(game_map, offset, rows, columns)
+            player.info = "SCORE = " + str(player.score) + "        LIVES = " + str(
+                player.lives) + "       TIME LEFT= " + str(player.time)
+            for val in range(columns):
+                if(len(player.info) > val):
+                    game_map.grid[0][offset +
+                                     val] = Fore.YELLOW + player.info[val]
+                else:
+                    game_map.grid[0][offset +
+                                     val] = Back.BLACK + Fore.BLACK + ' '
             output_str = ""
             for row in range(rows):
                 for col in range(columns):
@@ -52,8 +61,18 @@ if __name__ == "__main__":
                 output_str += '\n'
             print('\033[H' + output_str)
             break
+
         if player.lives <= 0 or player.time == 0:
             loose(game_map, offset, rows, columns)
+            player.info = "SCORE = " + str(player.score) + "        LIVES = " + str(
+                player.lives) + "       TIME LEFT= " + str(player.time)
+            for val in range(columns):
+                if(len(player.info) > val):
+                    game_map.grid[0][offset +
+                                     val] = Fore.YELLOW + player.info[val]
+                else:
+                    game_map.grid[0][offset +
+                                     val] = Back.BLACK + Fore.BLACK + ' '
             output_str = ""
             for row in range(rows):
                 for col in range(columns):
@@ -84,7 +103,15 @@ if __name__ == "__main__":
             else:
                 player.change_vel(val)
         else:
-            pass
+            # pass
+            if time.time() - gtime >= 0.022:
+                player.vely += player.gravity
+                gtime = time.time()
+
+        if player.dragon == 1:
+            bullet = shoot(player.pos_x + player.width,
+                           player.pos_y - player.height + 1, world_x + offset - 1)
+            bullets.append(bullet)
 
         if player.shield == 1:
             if time.time() - player.shield_time >= shield_time:
@@ -111,9 +138,10 @@ if __name__ == "__main__":
                         player.velx += 1
             game_map.objectm(game_map.magnet[0])
 
-        if time.time() - gtime >= 0.022:
-            player.vely += player.gravity
-            gtime = time.time()
+        # if time.time() - gtime >= 0.022:
+        #     player.vely += player.gravity
+        #     gtime = time.time()
+
         player.change_pos()
         player.check(world_x, world_y, offset)
         if game_map.mgnt_pos_x >= offset and game_map.mgnt_pos_x <= columns + offset:
@@ -130,6 +158,7 @@ if __name__ == "__main__":
                     game_map.object(blt)
 
         check_player_speed_boost(game_map, player)
+        check_player_dragon(game_map, player)
         if int(offset/((frames-2)*columns)) > 0:
             check_player_bossenemy(player, bossenemy)
             check_bossenemy_bullets(bullets, bossenemy, game_map)
@@ -137,6 +166,20 @@ if __name__ == "__main__":
         check_flames_bullets(bullets, game_map, player)
         check_flames(game_map, player)
         check_coins(game_map, player)
+        if player.dragon == 1:
+            if player.cnt <= 10:
+                dragon(player, 'dragon1.txt')
+                player.cnt += 1
+            else:
+                dragon(player, 'dragon2.txt')
+                player.cnt += 1
+                if player.cnt == 20:
+                    player.cnt = 0
+
+        if player.dragon == 0:
+            player.height = 3
+            player.width = 3
+            player.char = [[' ', '0', ' '], ['-', '|', '-'], ['/', '|', '\\']]
         game_map.objectp(player)
 
         # to update score lives and time everytime
