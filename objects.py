@@ -7,102 +7,102 @@ colorama.init()
 
 class coins:
     def __init__(self, height, width):
-        self.height = height
-        self.width = width
+        self._height = height
+        self._width = width
 
     def pos(self, x, y):
-        self.pos_x = x
-        self.pos_y = y
-        self.color = Fore.YELLOW + '$'
+        self._pos_x = x
+        self._pos_y = y
+        self._color = Fore.YELLOW + '$'
 
 
 class flame:
     def __init__(self):
-        self.width = 1
-        self.active = 1
-        self.hitscore = 5
+        self._width = 1
+        self._active = 1
+        self._hitscore = 5
         # pos = 0 --> horizontal
         # pos = 1 --> vertical
         # pos = 2 --> at 45 angle
 
     def pos(self, x, y, h):
-        self.pos_x = x
-        self.pos_y = y
-        self.height = h
-        self.color_corners = Back.RED + Fore.RED + ' '
-        self.color_fill = Back.YELLOW + Fore.YELLOW + ' '
+        self._pos_x = x
+        self._pos_y = y
+        self._height = h
+        self._color_corners = Back.RED + Fore.RED + ' '
+        self._color_fill = Back.YELLOW + Fore.YELLOW + ' '
 
     def angle(self, angle):
-        self.angle = angle
+        self._angle = angle
 
 
 class shoot:
     def __init__(self, x, y, lim):
         # if this bullet is finished or not
-        self.active = 1
-        self.vel = 5
-        self.height = 2
-        self.width = 3
-        self.limit = lim - self.width
-        self.pos_x = x
-        self.pos_y = y
-        self.color = Fore.CYAN
-        self.char = ([['*' for col in range(self.width)]
-                      for row in range(self.height)])
+        self._active = 1
+        self._vel = 5
+        self._height = 2
+        self._width = 3
+        self._limit = lim - self._width
+        self._pos_x = x
+        self._pos_y = y + self._height - 1
+        self._color = Fore.CYAN
+        self._char = ([['*' for col in range(self._width)]
+                       for row in range(self._height)])
 
 
 class boss_shoot:
     def __init__(self, x, y, lim, rows):
         # if this bullet is finished or not
-        self.active = 1
-        self.vel_x = 9
-        self.vel_y = 1
-        self.height = 3
-        self.width = 3
-        self.limit_x = lim
-        self.limit_y = rows - 4
-        self.pos_x = x
-        self.pos_y = y
-        self.color = Fore.WHITE
-        self.char = [[' ', '*', ' '], ['*', '*', '*'], [' ', '*', ' ']]
+        self._active = 1
+        self._vel_x = 9
+        self._vel_y = 1
+        self._height = 3
+        self._width = 3
+        self._limit_x = lim
+        self._limit_y = rows - 4
+        self._pos_x = x
+        self._pos_y = y
+        self._color = Fore.WHITE
+        self._char = [[' ', '*', ' '], ['*', '*', '*'], [' ', '*', ' ']]
 
 
 class magnet:
     def __init__(self, x, y):
-        self.pos_x = x
-        self.pos_y = y
-        self.height = 3
-        self.width = 4
-        self.color_left = Back.RED + Fore.BLACK
-        self.color_right = Back.BLUE + Fore.BLACK
-        self.transp = Back.BLACK + Fore.BLACK + ' '
-        self.char = [['X', 'X', 'X', 'X'],
-                     ['X', ' ', ' ', 'X'], ['X', ' ', ' ', 'X']]
+        self._pos_x = x
+        self._pos_y = y
+        self._height = 3
+        self._width = 4
+        self._color_left = Back.RED + Fore.BLACK
+        self._color_right = Back.BLUE + Fore.BLACK
+        self._transp = Back.BLACK + Fore.BLACK + ' '
+        self._char = [['X', 'X', 'X', 'X'],
+                      ['X', ' ', ' ', 'X'], ['X', ' ', ' ', 'X']]
 
 
 class speedboost:
     def __init__(self, x, y, frm):
-        self.pos_x = x
-        self.pos_y = y
-        self.height = 3
-        self.width = 4
-        self.speedboost_frame = frm
-        self.color1 = Back.BLUE + Fore.BLACK
-        self.color2 = Back.RED + Fore.BLACK
-        self.transp = Back.BLACK + Fore.BLACK + ' '
-        self.char = [[' ', ' ', ' ', ' '],
-                     [' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ']]
+        self._pos_x = x
+        self._pos_y = y
+        self._height = 3
+        self._width = 4
+        self._speedboost_frame = frm
+        self._color1 = Back.BLUE + Fore.BLACK
+        self._color2 = Back.RED + Fore.BLACK
+        self._transp = Back.BLACK + Fore.BLACK + ' '
+        self._char = [[' ', ' ', ' ', ' '],
+                      [' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ']]
 
 
 class dragon:
     def __init__(self, x, y, frm):
-        self.pos_x = x
-        self.pos_y = y
-        self.height = 3
-        self.width = 4
-        self.dragon_frame = frm
-        self.color1 = Back.YELLOW + Fore.BLACK
-        self.color2 = Back.RED + Fore.BLACK
-        self.transp = Back.BLACK + Fore.BLACK + ' '
-        self.char = [[' ', ' ', ' ', ' '],
-                     [' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ']]
+        self._pos_x = x
+        self._pos_y = y
+        self._height = 3
+        self._width = 4
+        self._dragon_frame = frm
+        self._color1 = Back.YELLOW + Fore.BLACK
+        self._color2 = Back.RED + Fore.BLACK
+        self._transp = Back.BLACK + Fore.BLACK + ' '
+        self._char = [[' ', ' ', ' ', ' '],
+                      [' ', ' ', ' ', ' '], [' ', ' ', ' ', ' ']]

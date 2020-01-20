@@ -9,26 +9,26 @@ colorama.init()
 
 class scenery:
     def __init__(self, player, rows, cols, frames):
-        self.rows = rows
-        self.cols = cols*frames
-        self.grid = ([[Back.BLACK + Fore.BLACK + ' ' for col in range(self.cols)]
-                      for row in range(self.rows)])
-        self.flames = []
-        self.speedboost = []
-        self.dragon = []
-        self.speedboost_active = 0
-        self.magnet = []
-        self.coins_limit = 14
+        self._rows = rows
+        self._cols = cols*frames
+        self._grid = ([[Back.BLACK + Fore.BLACK + ' ' for col in range(self._cols)]
+                       for row in range(self._rows)])
+        self._flames = []
+        self._speedboost = []
+        self._dragon = []
+        self._speedboost_active = 0
+        self._magnet = []
+        self._coins_limit = 14
 
-        for val in range(self.cols):
+        for val in range(self._cols):
             # sky
-            if(len(player.info) > val):
-                self.grid[0][val] = Fore.YELLOW + player.info[val]
-            self.grid[1][val] = Fore.WHITE + 'X'
+            if(len(player._info) > val):
+                self._grid[0][val] = Fore.YELLOW + player._info[val]
+            self._grid[1][val] = Fore.WHITE + 'X'
             # ground
-            self.grid[self.rows - 1][val] = Fore.GREEN + 'X'
-            self.grid[self.rows - 2][val] = Fore.GREEN + 'X'
-            self.grid[self.rows - 3][val] = Fore.GREEN + 'X'
+            self._grid[self._rows - 1][val] = Fore.GREEN + 'X'
+            self._grid[self._rows - 2][val] = Fore.GREEN + 'X'
+            self._grid[self._rows - 3][val] = Fore.GREEN + 'X'
 
         magnet_frame = random.randint(8, frames-2)
         speedboost_frame = random.randint(2, 4)
@@ -54,12 +54,12 @@ class scenery:
                         no_of_coins -= 1
                         continue
                     a = random.randint(max(left, prevx_coins), right - w - 1)
-                    b = random.randint(4, self.coins_limit)
+                    b = random.randint(4, self._coins_limit)
                     prevx_coins = a + w + 2
                     coin1.pos(a, b)
-                    for row in range(coin1.height):
-                        for col in range(coin1.width):
-                            self.grid[b - row][a + col] = coin1.color
+                    for row in range(coin1._height):
+                        for col in range(coin1._width):
+                            self._grid[b - row][a + col] = coin1._color
                     no_of_coins -= 1
 
                 # FLAMES
@@ -74,7 +74,7 @@ class scenery:
                             continue
                         flame1.angle(0)
                         a = random.randint(max(left, prevx_flames), right-h-2)
-                        b = random.randint(self.coins_limit + 2, rows-5)
+                        b = random.randint(self._coins_limit + 2, rows-5)
                         prevx_flames = a + h + 5
                         flame1.pos(a, b, h)
                     elif angle == 1:
@@ -85,7 +85,7 @@ class scenery:
                             continue
                         flame1.angle(1)
                         a = random.randint(max(left, prevx_flames), right)
-                        b = random.randint(self.coins_limit + h + 2, rows - 5)
+                        b = random.randint(self._coins_limit + h + 2, rows - 5)
                         prevx_flames = a + 5
                         flame1.pos(a, b, h)
                     else:
@@ -97,28 +97,29 @@ class scenery:
                         flame1.angle(2)
                         a = random.randint(
                             max(left, prevx_flames), right - h - 2)
-                        b = random.randint(self.coins_limit + h + 2, rows-5)
+                        b = random.randint(self._coins_limit + h + 2, rows-5)
                         prevx_flames = a + h + 5
                         flame1.pos(a, b, h)
 
-                    self.flames.append(flame1)
-                    for row in range(flame1.height):
-                        if flame1.angle == 1:
-                            if row == 0 or row == flame1.height - 1:
-                                self.grid[b-row][a] = flame1.color_corners
+                    self._flames.append(flame1)
+                    for row in range(flame1._height):
+                        if flame1._angle == 1:
+                            if row == 0 or row == flame1._height - 1:
+                                self._grid[b-row][a] = flame1._color_corners
                             else:
-                                self.grid[b-row][a] = flame1.color_fill
+                                self._grid[b-row][a] = flame1._color_fill
 
-                        elif flame1.angle == 0:
-                            if row == 0 or row == flame1.height - 1:
-                                self.grid[b][a+row] = flame1.color_corners
+                        elif flame1._angle == 0:
+                            if row == 0 or row == flame1._height - 1:
+                                self._grid[b][a+row] = flame1._color_corners
                             else:
-                                self.grid[b][a+row] = flame1.color_fill
+                                self._grid[b][a+row] = flame1._color_fill
                         else:
-                            if row == 0 or row == flame1.height - 1:
-                                self.grid[b-row][a+row] = flame1.color_corners
+                            if row == 0 or row == flame1._height - 1:
+                                self._grid[b-row][a +
+                                                  row] = flame1._color_corners
                             else:
-                                self.grid[b-row][a+row] = flame1.color_fill
+                                self._grid[b-row][a+row] = flame1._color_fill
 
                     no_of_flames -= 1
 
@@ -128,27 +129,27 @@ class scenery:
                     a = random.randint(prevx_coins, right+5)
                 else:
                     a = random.randint(prevx_coins, right)
-                b = random.randint(4, self.coins_limit)
+                b = random.randint(4, self._coins_limit)
                 prevx_coins = a + 2
-                self.mgnt_frame = magnet_frame
-                self.mgnt_rangex = 40
-                self.mgnt_pos_x = a
-                self.mgnt_pos_y = b
+                self._mgnt_frame = magnet_frame
+                self._mgnt_rangex = 40
+                self._mgnt_pos_x = a
+                self._mgnt_pos_y = b
                 mgnt = magnet(a, b)
-                self.magnet.append(mgnt)
-                for i in range(mgnt.height):
-                    for j in range(mgnt.width):
-                        if j < mgnt.width/2:
-                            self.grid[b-i][a+j] = mgnt.color_left + \
-                                mgnt.char[mgnt.height - 1 - i][j]
+                self._magnet.append(mgnt)
+                for i in range(mgnt._height):
+                    for j in range(mgnt._width):
+                        if j < mgnt._width/2:
+                            self._grid[b-i][a+j] = mgnt._color_left + \
+                                mgnt._char[mgnt._height - 1 - i][j]
                         else:
-                            self.grid[b-i][a+j] = mgnt.color_right + \
-                                mgnt.char[mgnt.height - 1 - i][j]
+                            self._grid[b-i][a+j] = mgnt._color_right + \
+                                mgnt._char[mgnt._height - 1 - i][j]
 
-                self.grid[b][a+1] = mgnt.transp
-                self.grid[b][a+2] = mgnt.transp
-                self.grid[b-1][a+1] = mgnt.transp
-                self.grid[b-1][a+2] = mgnt.transp
+                self._grid[b][a+1] = mgnt._transp
+                self._grid[b][a+2] = mgnt._transp
+                self._grid[b-1][a+1] = mgnt._transp
+                self._grid[b-1][a+2] = mgnt._transp
 
             # SPEEDBOOST
             if ind == speedboost_frame:
@@ -156,20 +157,20 @@ class scenery:
                     a = random.randint(prevx_coins, right+5)
                 else:
                     a = random.randint(prevx_coins, right)
-                b = random.randint(4, self.coins_limit)
+                b = random.randint(4, self._coins_limit)
                 prevx_coins = a + 2
                 spd = speedboost(a, b, speedboost_frame)
-                self.speedboost.append(spd)
-                for i in range(spd.height):
-                    for j in range(spd.width):
+                self._speedboost.append(spd)
+                for i in range(spd._height):
+                    for j in range(spd._width):
                         if (b - i + a + j) % 2 == 0:
-                            self.grid[b-i][a+j] = spd.color1 + \
-                                spd.char[spd.height - 1 - i][j]
+                            self._grid[b-i][a+j] = spd._color1 + \
+                                spd._char[spd._height - 1 - i][j]
                         else:
-                            self.grid[b-i][a+j] = spd.color2 + \
-                                spd.char[spd.height - 1 - i][j]
-                self.grid[b-1][a+1] = spd.transp
-                self.grid[b-1][a+2] = spd.transp
+                            self._grid[b-i][a+j] = spd._color2 + \
+                                spd._char[spd._height - 1 - i][j]
+                self._grid[b-1][a+1] = spd._transp
+                self._grid[b-1][a+2] = spd._transp
 
             # DRAGON
             if ind == dragon_frame:
@@ -177,56 +178,56 @@ class scenery:
                     a = random.randint(prevx_coins, right+5)
                 else:
                     a = random.randint(prevx_coins, right)
-                b = random.randint(4, self.coins_limit)
+                b = random.randint(4, self._coins_limit)
                 prevx_coins = a + 2
                 spd = dragon(a, b, speedboost_frame)
-                self.dragon.append(spd)
-                for i in range(spd.height):
-                    for j in range(spd.width):
+                self._dragon.append(spd)
+                for i in range(spd._height):
+                    for j in range(spd._width):
                         if (b - i + a + j) % 2 == 0:
-                            self.grid[b-i][a+j] = spd.color1 + \
-                                spd.char[spd.height - 1 - i][j]
+                            self._grid[b-i][a+j] = spd._color1 + \
+                                spd._char[spd._height - 1 - i][j]
                         else:
-                            self.grid[b-i][a+j] = spd.color2 + \
-                                spd.char[spd.height - 1 - i][j]
-                self.grid[b-1][a+1] = spd.transp
-                self.grid[b-1][a+2] = spd.transp
+                            self._grid[b-i][a+j] = spd._color2 + \
+                                spd._char[spd._height - 1 - i][j]
+                self._grid[b-1][a+1] = spd._transp
+                self._grid[b-1][a+2] = spd._transp
 
     def object(self, object):
-        for y in range(0, object.height):
-            for x in range(0, object.width):
-                self.grid[object.pos_y - y][object.pos_x +
-                                            x] = object.color + object.char[object.height - 1 - y][x]
+        for y in range(0, object._height):
+            for x in range(0, object._width):
+                self._grid[object._pos_y - y][object._pos_x +
+                                              x] = object._color + object._char[object._height - 1 - y][x]
 
     def objectp(self, object):
-        for y in range(0, object.height):
-            for x in range(0, object.width):
-                if(object.shield == 0):
-                    self.grid[object.pos_y - y][object.pos_x +
-                                                x] = object.color + object.char[object.height - 1 - y][x]
+        for y in range(0, object._height):
+            for x in range(0, object._width):
+                if(object._shield == 0):
+                    self._grid[object._pos_y - y][object._pos_x +
+                                                  x] = object._color + object._char[object._height - 1 - y][x]
                 else:
-                    self.grid[object.pos_y - y][object.pos_x +
-                                                x] = object.shieldactive_color + object.char[object.height - 1 - y][x]
+                    self._grid[object._pos_y - y][object._pos_x +
+                                                  x] = object._shieldactive_color + object._char[object._height - 1 - y][x]
 
     def objectm(self, object):
-        a = object.pos_x
-        b = object.pos_y
-        for i in range(object.height):
-            for j in range(object.width):
-                if j < object.width/2:
-                    self.grid[b-i][a+j] = object.color_left + \
-                        object.char[object.height - 1 - i][j]
+        a = object._pos_x
+        b = object._pos_y
+        for i in range(object._height):
+            for j in range(object._width):
+                if j < object._width/2:
+                    self._grid[b-i][a+j] = object._color_left + \
+                        object._char[object._height - 1 - i][j]
                 else:
-                    self.grid[b-i][a+j] = object.color_right + \
-                        object.char[object.height - 1 - i][j]
+                    self._grid[b-i][a+j] = object._color_right + \
+                        object._char[object._height - 1 - i][j]
 
-        self.grid[b][a+1] = object.transp
-        self.grid[b][a+2] = object.transp
-        self.grid[b-1][a+1] = object.transp
-        self.grid[b-1][a+2] = object.transp
+        self._grid[b][a+1] = object._transp
+        self._grid[b][a+2] = object._transp
+        self._grid[b-1][a+1] = object._transp
+        self._grid[b-1][a+2] = object._transp
 
     def clear(self, object):
-        for y in range(0, object.height):
-            for x in range(0, object.width):
-                self.grid[object.pos_y - y][object.pos_x +
-                                            x] = Back.BLACK + Fore.BLACK + ' '
+        for y in range(0, object._height):
+            for x in range(0, object._width):
+                self._grid[object._pos_y - y][object._pos_x +
+                                              x] = Back.BLACK + Fore.BLACK + ' '
