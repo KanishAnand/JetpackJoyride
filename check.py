@@ -11,7 +11,7 @@ def check_coins(game_map, player):
     for row in range(player._height):
         for col in range(player._width):
             if game_map._grid[y - row][x + col] == chr:
-                # playsound('coin.mp3')
+                # playsound('coin.mp3', False)
                 player._score += 1
                 game_map._grid[y-row][x+col] = Back.BLACK + Fore.BLACK + ' '
 
