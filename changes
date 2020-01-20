@@ -7,11 +7,6 @@
 15. inheritence
 18. sound
 23. condition of hitting bullet to bossenemy is not correct
-24. player can sometimes shoot bullets to sky also in this remove that
-28. bullets are hitting coins and shield and magnet too
-29. not able to reach topmost point
 30. adjust velocity of dragon ice ball
-31. we can hit magnet or superpower with bullets
 32. change y range of coins from 1 -5 to 1 - screen rows mid
-33. bullets are sometimes hitting sky
 34. pause after one life is lost

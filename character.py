@@ -11,7 +11,7 @@ class Character:
     def __init__(self, x, y):
         self._pos_x = x
         self._pos_y = y - 3
-        self._gravity = 0.1
+        self._gravity = 0.15
         self._velx = 0
         self._vely = 0
         self._cnt = 0

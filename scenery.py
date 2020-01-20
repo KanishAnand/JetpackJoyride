@@ -226,6 +226,28 @@ class scenery:
         self._grid[b-1][a+1] = object._transp
         self._grid[b-1][a+2] = object._transp
 
+    def object_sky(self, a, b):
+        for val in range(b):
+            self._grid[1][a+val] = Fore.WHITE + 'X'
+            # ground
+            self._grid[self._rows - 1][a+val] = Fore.GREEN + 'X'
+            self._grid[self._rows - 2][a+val] = Fore.GREEN + 'X'
+            self._grid[self._rows - 3][a+val] = Fore.GREEN + 'X'
+
+    def objects(self, object):
+        a = object._pos_x
+        b = object._pos_y
+        for i in range(object._height):
+            for j in range(object._width):
+                if (b - i + a + j) % 2 == 0:
+                    self._grid[b-i][a+j] = object._color1 + \
+                        object._char[object._height - 1 - i][j]
+                else:
+                    self._grid[b-i][a+j] = object._color2 + \
+                        object._char[object._height - 1 - i][j]
+        self._grid[b-1][a+1] = object._transp
+        self._grid[b-1][a+2] = object._transp
+
     def clear(self, object):
         for y in range(0, object._height):
             for x in range(0, object._width):

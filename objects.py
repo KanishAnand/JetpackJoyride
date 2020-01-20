@@ -86,6 +86,7 @@ class speedboost:
         self._pos_y = y
         self._height = 3
         self._width = 4
+        self._active = 1
         self._speedboost_frame = frm
         self._color1 = Back.BLUE + Fore.BLACK
         self._color2 = Back.RED + Fore.BLACK
@@ -100,6 +101,7 @@ class dragon:
         self._pos_y = y
         self._height = 3
         self._width = 4
+        self._active = 1
         self._dragon_frame = frm
         self._color1 = Back.YELLOW + Fore.BLACK
         self._color2 = Back.RED + Fore.BLACK

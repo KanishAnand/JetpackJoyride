@@ -103,10 +103,11 @@ if __name__ == "__main__":
             else:
                 player.change_vel(val)
         else:
-            # pass
-            if time.time() - gtime >= 0.022:
-                player._vely += player._gravity
-                gtime = time.time()
+            pass
+
+        if time.time() - gtime >= 0.05:
+            player._vely += player._gravity
+            gtime = time.time()
 
         if player._dragon == 1:
             bullet = shoot(player._pos_x + player._width,
@@ -138,9 +139,10 @@ if __name__ == "__main__":
                         player._velx += 1
             game_map.objectm(game_map._magnet[0])
 
-        # if time.time() - gtime >= 0.022:
-        #     player._vely += player._gravity
-        #     gtime = time.time()
+        if game_map._speedboost[0]._active == 1:
+            game_map.objects(game_map._speedboost[0])
+        if game_map._dragon[0]._active == 1:
+            game_map.objects(game_map._dragon[0])
 
         player.change_pos()
         player.check(world_x, world_y, offset)
@@ -197,6 +199,9 @@ if __name__ == "__main__":
                 game_map._grid[0][val] = Fore.YELLOW + player._info[val]
             else:
                 game_map._grid[0][val] = Back.BLACK + Fore.BLACK + ' '
+
+        game_map.object_sky(offset, columns)
+
         output_str = ""
         for row in range(rows):
             for col in range(columns):

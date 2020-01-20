@@ -1,5 +1,6 @@
 import colorama
 from colorama import Fore, Back, Style
+from playsound import playsound
 colorama.init()
 
 
@@ -10,6 +11,7 @@ def check_coins(game_map, player):
     for row in range(player._height):
         for col in range(player._width):
             if game_map._grid[y - row][x + col] == chr:
+                # playsound('coin.mp3')
                 player._score += 1
                 game_map._grid[y-row][x+col] = Back.BLACK + Fore.BLACK + ' '
 
@@ -220,6 +222,7 @@ def check_player_speed_boost(game_map, player):
         val = check_coll_matrix(spd, player)
         if val == 1:
             player._speedboost = 1
+            spd._active = 0
             game_map._speedboost_active = 1
             game_map.clear(spd)
             break
@@ -230,6 +233,7 @@ def check_player_dragon(game_map, player):
     for spd in game_map._dragon:
         val = check_coll_matrix(spd, player)
         if val == 1:
+            spd._active = 0
             player._dragon = 1
             game_map.clear(spd)
             break
