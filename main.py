@@ -176,17 +176,23 @@ if __name__ == "__main__":
             game_map.object(cld)
 
         if player.get_dragon() == 1:
-            if player.get_cnt() <= 3:
-                dragon(player, 'dragon1.txt')
+            if player.get_cnt() <= 2:
+                dragon(player, 'a.txt')
+                player.change_cnt(1)
+            elif player.get_cnt() <= 4:
+                dragon(player, 'b.txt')
                 player.change_cnt(1)
             elif player.get_cnt() <= 6:
-                dragon(player, 'dragon3.txt')
+                dragon(player, 'c.txt')
                 player.change_cnt(1)
-            elif player.get_cnt() <= 9:
-                dragon(player, 'dragon2.txt')
+            elif player.get_cnt() <= 8:
+                dragon(player, 'd.txt')
+                player.change_cnt(1)
+            elif player.get_cnt() <= 10:
+                dragon(player, 'e.txt')
                 player.change_cnt(1)
             else:
-                dragon(player, 'dragon3.txt')
+                dragon(player, 'f.txt')
                 player.change_cnt(1)
                 if player.get_cnt() == 12:
                     player.put_cnt(0)

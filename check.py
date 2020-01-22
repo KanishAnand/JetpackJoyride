@@ -1,7 +1,6 @@
 import time
 import colorama
 from colorama import Fore, Back, Style
-from playsound import playsound
 colorama.init()
 
 
@@ -197,6 +196,8 @@ def check_player_bossenemybullets(game_map, player, bossenemy):
 def check_coll_matrix(mtrx1, mtrx2):
     lst = []
     flag = 0
+    # if mtrx1.get_posx() >= mtrx2.get_posx() - mtrx1.get_width() + 1 and mtrx1.get_posx() <= mtrx2.get_posx() + mtrx2.get_width() - 1:
+    # if mtrx1.get_posy() >= mtrx2.get_posy() - mtrx1.get_height() + 1 and mtrx1.get_posy() <= mtrx2.get_posy() + mtrx2.get_height() - 1:
     for i in range(mtrx1.get_height()):
         for j in range(mtrx1.get_width()):
             a = mtrx1.get_posy() - i
