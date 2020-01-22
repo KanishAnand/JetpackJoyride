@@ -6,7 +6,7 @@ class BossEnemy:
         self.make_arr()
 
     def make_arr(self):
-        with open('dragon1.txt', 'rb') as f:
+        with open('1.txt', 'rb') as f:
             arr = []
             cnt = 0
             mx = -1

@@ -1,3 +1,4 @@
+from config import *
 import colorama
 from colorama import Fore, Back, Style
 from scenery import scenery
@@ -14,69 +15,64 @@ import sys
 import os
 
 colorama.init()
-rows, columns = 30, 90
-frames = 12
-offset_inc = 1
-global_time = 0
-fast_offset_inc = 2
-shield_renew_time = 30
-shield_time = 10
-# due to 0 based indexing of the grid
-world_x = columns - 1
-world_y = rows - 1
 
 if __name__ == "__main__":
     # disabling buffering so don't have to press enter
     orig_settings = termios.tcgetattr(sys.stdin)
     tty.setcbreak(sys.stdin)
     player = Person(1, world_y)
-    bossenemy = BossEnemy(world_x*frames, world_y)
+    bossenemy = BossEnemy((world_x+1)*frames - 2, world_y)
     input = input()
     input.hide_cursor()
-    offset = 0
-    player._info = "SCORE = " + str(player._score) + "        LIVES = " + str(
-        player._lives) + "       TIME LEFT= " + str(player._time)
+    info = "SCORE = " + str(player.get_score()) + "        LIVES = " + str(
+        player.get_lives()) + "       TIME LEFT= " + str(player.get_time())
+    player.change_info(info)
     game_map = scenery(player, rows, columns, frames)
     start_time = time.time()
+    offset = 0
     bullets = []
     global_time = time.time()
     gtime = time.time()
 
     while(1):
-        if bossenemy._life <= 0 and player._lives != 0 and player._time != 0:
+        prev_life = player.get_lives()
+        if bossenemy.get_lives() <= 0 and player.get_lives() != 0 and player.get_time() != 0:
             won(game_map, offset, rows, columns)
-            player._info = "SCORE = " + str(player._score) + "        LIVES = " + str(
-                player._lives) + "       TIME LEFT= " + str(player._time)
+            info = "SCORE = " + str(player.get_score()) + "        LIVES = " + str(
+                player.get_lives()) + "       TIME LEFT= " + str(player.get_time())
+            player.change_info(info)
             for val in range(columns):
-                if(len(player._info) > val):
-                    game_map._grid[0][offset +
-                                      val] = Fore.YELLOW + player._info[val]
+                if(len(player.get_info()) > val):
+                    game_map.change_grid(0, offset +
+                                         val, Fore.YELLOW + (player.get_info())[val])
                 else:
-                    game_map._grid[0][offset +
-                                      val] = Back.BLACK + Fore.BLACK + ' '
+                    game_map.change_grid(0, offset +
+                                         val, Back.BLACK + Fore.BLACK + ' ')
             output_str = ""
             for row in range(rows):
                 for col in range(columns):
-                    output_str += game_map._grid[row][offset + col]
+                    output_str += game_map.get_grid(row, offset + col)
                 output_str += '\n'
             print('\033[H' + output_str)
             break
 
-        if player._lives <= 0 or player._time == 0:
+        if player.get_lives() <= 0 or player.get_time() == 0:
             loose(game_map, offset, rows, columns)
-            player._info = "SCORE = " + str(player._score) + "        LIVES = " + str(
-                player._lives) + "       TIME LEFT= " + str(player._time)
+            info = "SCORE = " + str(player.get_score()) + "        LIVES = " + str(
+                player.get_lives()) + "       TIME LEFT= " + str(player.get_time())
+            player.change_info(info)
+
             for val in range(columns):
-                if(len(player._info) > val):
-                    game_map._grid[0][offset +
-                                      val] = Fore.YELLOW + player._info[val]
+                if(len(player.get_info()) > val):
+                    game_map.change_grid(0, offset +
+                                         val, Fore.YELLOW + (player.get_info())[val])
                 else:
-                    game_map._grid[0][offset +
-                                      val] = Back.BLACK + Fore.BLACK + ' '
+                    game_map.change_grid(0, offset +
+                                         val, Back.BLACK + Fore.BLACK + ' ')
             output_str = ""
             for row in range(rows):
                 for col in range(columns):
-                    output_str += game_map._grid[row][offset + col]
+                    output_str += game_map.get_grid(row, offset + col)
                 output_str += '\n'
             print('\033[H' + output_str)
             break
@@ -86,77 +82,83 @@ if __name__ == "__main__":
 
         if time.time() - global_time >= 1:
             global_time += 1
-            player._time -= 1
+            player.change_time(-1)
 
         if input.kbhit():
             val = input.getch()
             if(val == 'q' or val == 'Q'):
                 break
-            if val == ' ':
-                bullet = shoot(player._pos_x + player._width,
-                               player._pos_y - player._height + 1, world_x + offset - 1)
+            if val == 'b' or val == 'B':
+                bullet = player.fire_laser(offset)
                 bullets.append(bullet)
-            elif val == 's':
-                if player._shield == 0 and time.time() - player._prev_shield_occur >= shield_renew_time:
-                    player._shield = 1
-                    player._shield_time = time.time()
+            elif val == ' ':
+                if player.get_shield() == 0 and time.time() - player.get_prevshieldoccur() >= shield_renew_time:
+                    player.change_shield(1)
+                    player.change_shieldtime(time.time())
             else:
                 player.change_vel(val)
         else:
             pass
 
-        if time.time() - gtime >= 0.05:
-            player._vely += player._gravity
-            gtime = time.time()
+        # if time.time() - gtime >= 0.2:
+        # player.change_vely(player.get_gravity()*player._t)
+        player._pos_y += round(player.get_gravity()*player._t)
+        player._t += 0.2
+        # gtime = time.time()
 
-        if player._dragon == 1:
-            bullet = shoot(player._pos_x + player._width,
-                           player._pos_y - player._height + 1, world_x + offset - 1)
+        if player.get_dragon() == 1:
+            bullet = player.fire_laser(offset)
             bullets.append(bullet)
 
-        if player._shield == 1:
-            if time.time() - player._shield_time >= shield_time:
-                player._shield = 0
-                player._shield_time = 0
-                player._prev_shield_occur = time.time()
+        if player.get_shield() == 1:
+            if time.time() - player.get_shieldtime() >= shield_time:
+                player.change_shield(0)
+                player.change_shieldtime(0)
+                player.change_prevshieldoccur(time.time())
+
+        if player.get_speedboost() == 1 and time.time() - player.get_speedboosttime() >= 4:
+            player.change_speedboost(0)
+            game_map.change_speedboostactive(0)
 
         for val in bullets:
-            if val._pos_x > val._limit:
-                val._active = 0
-            if val._active == 1:
+            if val.get_posx() > val.get_limit():
+                val.change_active(0)
+            if val.get_active() == 1:
                 game_map.object(val)
 
-        if player._shield == 0:
-            if game_map._mgnt_pos_x >= offset and game_map._mgnt_pos_x <= columns + offset:
-                if abs(game_map._mgnt_pos_x - player._pos_x) <= game_map._mgnt_rangex:
-                    if game_map._mgnt_pos_y < player._pos_y:
-                        player._vely -= 0.61
-                    elif game_map._mgnt_pos_y > player._pos_y:
-                        player._vely += 0.61
-                    if game_map._mgnt_pos_x < player._pos_x:
-                        player._velx -= 1
-                    elif game_map._mgnt_pos_x > player._pos_x:
-                        player._velx += 1
-            game_map.objectm(game_map._magnet[0])
+        if player.get_shield() == 0:
+            if game_map.get_mgntposx() >= offset and game_map.get_mgntposx() <= columns + offset:
+                if abs(game_map.get_mgntposx() - player.get_posx()) <= game_map.get_mgntrangex():
+                    if game_map.get_mgntposy() < player.get_posy():
+                        player.change_vely(-0.61)
+                    elif game_map.get_mgntposy() > player.get_posy():
+                        player.change_vely(0.61)
+                    if game_map.get_mgntposx() < player.get_posx():
+                        player.change_velx(-1)
+                    elif game_map.get_mgntposx() > player.get_posx():
+                        player.change_velx(1)
+            game_map.objectm((game_map.get_magnet())[0])
 
-        if game_map._speedboost[0]._active == 1:
-            game_map.objects(game_map._speedboost[0])
-        if game_map._dragon[0]._active == 1:
-            game_map.objects(game_map._dragon[0])
+        if ((game_map.get_speedboost())[0]).get_active() == 1:
+            game_map.objects((game_map.get_speedboost())[0])
+        if ((game_map.get_dragon())[0]).get_active() == 1:
+            game_map.objects((game_map.get_dragon())[0])
 
         player.change_pos()
         player.check(world_x, world_y, offset)
-        if game_map._mgnt_pos_x >= offset and game_map._mgnt_pos_x <= columns + offset:
-            player._pos_y = max(player._pos_y, game_map._mgnt_pos_y + 3)
-        # check_coins should be before game_map._object as in check_coins we are checking if at positions there is some coin but in game_map we
+        # if game_map.get_mgntposx() >= offset and game_map.get_mgntposx() <= columns + offset:
+        #     player.put_posy(max(
+        #         player.get_posy(), game_map.get_mgntposy() + player._height))
+
+        # check_coins should be before game_map.object as in check_coins we are checking if at positions there is some coin but in game_map we
         # are rewriting that position with player
 
         # to adjust position of boss enemy according to player's position
         if int(offset/((frames-2)*columns)) > 0:
-            bossenemy.change_pos(offset+1, player._pos_y, rows)
+            bossenemy.change_pos(offset+1, player.get_posy(), rows)
             game_map.object(bossenemy)
-            for blt in bossenemy._bullets:
-                if blt._active == 1:
+            for blt in bossenemy.get_bullets():
+                if blt.get_active() == 1:
                     game_map.object(blt)
 
         check_player_speed_boost(game_map, player)
@@ -165,40 +167,48 @@ if __name__ == "__main__":
             check_player_bossenemy(player, bossenemy)
             check_bossenemy_bullets(bullets, bossenemy, game_map)
             check_player_bossenemybullets(game_map, player, bossenemy)
+
         check_flames_bullets(bullets, game_map, player)
         check_flames(game_map, player)
+        check_coins_bullets(game_map, bullets)
         check_coins(game_map, player)
-        if player._dragon == 1:
-            if player._cnt <= 10:
+        for cld in game_map.get_clouds():
+            game_map.object(cld)
+
+        if player.get_dragon() == 1:
+            if player.get_cnt() <= 10:
                 dragon(player, 'dragon1.txt')
-                player._cnt += 1
+                player.change_cnt(1)
             else:
                 dragon(player, 'dragon2.txt')
-                player._cnt += 1
-                if player._cnt == 20:
-                    player._cnt = 0
+                player.change_cnt(1)
+                if player.get_cnt() == 20:
+                    player.put_cnt(0)
 
-        if player._dragon == 0:
-            player._height = 3
-            player._width = 3
-            player._char = [[' ', '0', ' '], ['-', '|', '-'], ['/', '|', '\\']]
+        if player.get_dragon() == 0:
+            player.change_height(3)
+            player.change_width(3)
+            player.change_char(
+                [[' ', '0', ' '], ['-', '|', '-'], ['/', ' ', '\\']])
         game_map.objectp(player)
 
         # to update score lives and time everytime
 
-        player._info = "SCORE = " + str(player._score) + "        LIVES = " + str(
-            player._lives) + "       TIME LEFT= " + str(player._time)
-        if player._shield == 0 and time.time() - player._prev_shield_occur >= shield_renew_time:
-            player._info += "       Shield Available"
-        elif player._shield == 1:
-            player._info += "        Shield In Use"
+        info = "SCORE = " + str(player.get_score()) + "        LIVES = " + str(
+            player.get_lives()) + "       TIME LEFT= " + str(player.get_time())
+        player.change_info(info)
+        if player.get_shield() == 0 and time.time() - player.get_prevshieldoccur() >= shield_renew_time:
+            player.change_info(info + "       Shield Available")
+        elif player.get_shield() == 1:
+            player.change_info(info + "        Shield In Use")
         else:
-            player._info += "        Shield Not Available"
+            player.change_info(info + "        Shield Not Available")
         for val in range(columns):
-            if(len(player._info) > val):
-                game_map._grid[0][val] = Fore.YELLOW + player._info[val]
+            if(len(player.get_info()) > val):
+                game_map.change_grid(
+                    0, val, Fore.YELLOW + (player.get_info())[val])
             else:
-                game_map._grid[0][val] = Back.BLACK + Fore.BLACK + ' '
+                game_map.change_grid(0, val, Back.BLACK + Fore.BLACK + ' ')
 
         game_map.object_sky(offset, columns)
 
@@ -207,56 +217,59 @@ if __name__ == "__main__":
             for col in range(columns):
                 if(row == 0):
                     # to not move score lives and time line
-                    output_str += game_map._grid[row][col]
+                    output_str += game_map.get_grid(row, col)
                 else:
-                    output_str += game_map._grid[row][offset + col]
+                    output_str += game_map.get_grid(row, col+offset)
             output_str += '\n'
 
         # bring cursor to start instead of clearing the full screen
         print('\033[H' + output_str)
 
         for val in bullets:
-            if val._active == 1:
+            if val.get_active() == 1:
                 game_map.clear(val)
-                val._pos_x += 2
+                val.change_posx(2)
 
         game_map.clear(player)
         if int(offset/((frames-2)*columns)) > 0:
             game_map.clear(bossenemy)
-            for blt in bossenemy._bullets:
-                if blt._active == 1:
+            for blt in bossenemy.get_bullets():
+                if blt.get_active() == 1:
                     game_map.clear(blt)
-                    blt._pos_x -= blt._vel_x
-                    blt._pos_y += blt._vel_y
+                    blt.change_posx(-blt.get_velx())
+                    blt.change_posy(blt.get_vely())
                     # checkf for bullet colission person
-                    if blt._pos_x < blt._limit_x or blt._pos_y > blt._limit_y:
-                        blt._active = 0
+                    if blt.get_posx() < blt.get_limitx() or blt.get_posy() > blt.get_limity() or blt.get_posy() < 2:
+                        blt.change_active(0)
 
         tm = time.time()
         diff = tm - start_time
         if diff > 0.04 and offset < columns*(frames-1):
-            if game_map._speedboost_active == 1:
+            if game_map.get_speedboostactive() == 1:
                 offset += fast_offset_inc
             else:
                 offset += offset_inc
             # done so that with screen moving back player's position should remain same
-            if game_map._speedboost_active == 1:
-                player._velx += fast_offset_inc
+            if game_map.get_speedboostactive() == 1:
+                player.change_velx(fast_offset_inc)
             else:
-                player._velx += offset_inc
+                player.change_velx(offset_inc)
             player.change_pos()
             for val in bullets:
-                if val._active == 1:
-                    if game_map._speedboost_active == 1:
-                        val._pos_x += fast_offset_inc
+                if val.get_active() == 1:
+                    if game_map.get_speedboostactive() == 1:
+                        val.change_posx(fast_offset_inc)
                     else:
-                        val._pos_x += offset_inc
+                        val.change_posx(offset_inc)
             start_time = tm
 
-        player._velx = 0
+        player.put_velx(0)
         sys.stdin.flush()
         sys.stdout.flush()
         time.sleep(0.02)
+        final_life = player.get_lives()
+        if final_life < prev_life:
+            time.sleep(0.8)
 
     input.show_cursor()
     termios.tcsetattr(sys.stdin, termios.TCSADRAIN, orig_settings)

@@ -35,13 +35,13 @@ class game_over:
 def won(game_map, offset, rows, columns):
     for rw in range(rows):
         for val in range(columns):
-            game_map._grid[rw][val+offset] = Back.BLACK + Fore.BLACK + ' '
-            game_map._grid[0][val+offset] = Fore.WHITE + 'X'
-            game_map._grid[1][val+offset] = Fore.WHITE + 'X'
+            game_map.change_grid(rw, val+offset, Back.BLACK + Fore.BLACK + ' ')
+            game_map.change_grid(0, val+offset, Fore.WHITE + 'X')
+            game_map.change_grid(1, val+offset, Fore.WHITE + 'X')
             # ground
-            game_map._grid[rows - 1][val+offset] = Fore.GREEN + 'X'
-            game_map._grid[rows - 2][val+offset] = Fore.GREEN + 'X'
-            game_map._grid[rows - 3][val+offset] = Fore.GREEN + 'X'
+            game_map.change_grid(rows-1, val+offset, Fore.GREEN + 'X')
+            game_map.change_grid(rows-2, val+offset, Fore.GREEN + 'X')
+            game_map.change_grid(rows-3, val+offset, Fore.GREEN + 'X')
 
     win = game_over(offset + columns//2, rows//2, 'win.txt')
     game_map.object(win)
@@ -50,13 +50,13 @@ def won(game_map, offset, rows, columns):
 def loose(game_map, offset, rows, columns):
     for rw in range(rows):
         for val in range(columns):
-            game_map._grid[rw][val+offset] = Back.BLACK + Fore.BLACK + ' '
-            game_map._grid[0][val+offset] = Fore.WHITE + 'X'
-            game_map._grid[1][val+offset] = Fore.WHITE + 'X'
+            game_map.change_grid(rw, val+offset, Back.BLACK + Fore.BLACK + ' ')
+            game_map.change_grid(0, val+offset, Fore.WHITE + 'X')
+            game_map.change_grid(1, val+offset, Fore.WHITE + 'X')
             # ground
-            game_map._grid[rows - 1][val+offset] = Fore.GREEN + 'X'
-            game_map._grid[rows - 2][val+offset] = Fore.GREEN + 'X'
-            game_map._grid[rows - 3][val+offset] = Fore.GREEN + 'X'
+            game_map.change_grid(rows-1, val+offset, Fore.GREEN + 'X')
+            game_map.change_grid(rows-2, val+offset, Fore.GREEN + 'X')
+            game_map.change_grid(rows-3, val+offset, Fore.GREEN + 'X')
 
     loose = game_over(offset + columns//2, rows//2, 'loose.txt')
     game_map.object(loose)

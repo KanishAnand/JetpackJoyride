@@ -18,6 +18,8 @@ class scenery:
         self._dragon = []
         self._speedboost_active = 0
         self._magnet = []
+        self._coins = []
+        self._clouds = []
         self._coins_limit = 14
 
         for val in range(self._cols):
@@ -30,10 +32,12 @@ class scenery:
             self._grid[self._rows - 2][val] = Fore.GREEN + 'X'
             self._grid[self._rows - 3][val] = Fore.GREEN + 'X'
 
-        magnet_frame = random.randint(8, frames-2)
+        magnet_frame = random.randint(8, frames-3)
         speedboost_frame = random.randint(2, 4)
         dragon_frame = random.randint(5, 6)
 
+        prevx_coins = 1
+        prevx_flames = 1
         for ind in range(frames-1):
             # take care of random position so that it should not collide with upper border or lower border and other objects like player also
             left = 1 + (cols-2)*ind
@@ -41,25 +45,40 @@ class scenery:
 
             no_of_flames = random.randint(1, 7)
             no_of_coins = random.randint(3, 30)
-            prevx_coins = 1
-            prevx_flames = 1
+            no_of_clouds = 1
 
             while(no_of_coins != 0 and no_of_flames != 0):
+                # CLOUDS
+                if ind != magnet_frame and ind != speedboost_frame and ind != dragon_frame:
+                    if no_of_clouds != 0:
+                        a = prevx_coins
+                        b = 7
+                        cloud = clouds(a, b)
+                        self._clouds.append(cloud)
+                        for row in range(cloud._height):
+                            for col in range(cloud._width):
+                                self._grid[b - row][a +
+                                                    col] = cloud._color + cloud._char[cloud._height - 1 - row][col]
+                        prevx_coins = a + cloud._width * 2 + 1
+                        no_of_clouds -= 1
+
                 # COINS
                 if no_of_coins != 0:
                     h = random.randint(1, 3)
                     w = random.randint(12, 25)
-                    coin1 = coins(h, w)
                     if max(left, prevx_coins) > right - w - 1:
                         no_of_coins -= 1
                         continue
+                    coin1 = coins(h, w)
                     a = random.randint(max(left, prevx_coins), right - w - 1)
                     b = random.randint(4, self._coins_limit)
                     prevx_coins = a + w + 2
                     coin1.pos(a, b)
+                    self._coins.append(coin1)
                     for row in range(coin1._height):
                         for col in range(coin1._width):
-                            self._grid[b - row][a + col] = coin1._color
+                            self._grid[b - row][a +
+                                                col] = coin1._color + coin1._char
                     no_of_coins -= 1
 
                 # FLAMES
@@ -130,7 +149,7 @@ class scenery:
                 else:
                     a = random.randint(prevx_coins, right)
                 b = random.randint(4, self._coins_limit)
-                prevx_coins = a + 2
+                prevx_coins = a + 6
                 self._mgnt_frame = magnet_frame
                 self._mgnt_rangex = 40
                 self._mgnt_pos_x = a
@@ -158,7 +177,7 @@ class scenery:
                 else:
                     a = random.randint(prevx_coins, right)
                 b = random.randint(4, self._coins_limit)
-                prevx_coins = a + 2
+                prevx_coins = a + 5
                 spd = speedboost(a, b, speedboost_frame)
                 self._speedboost.append(spd)
                 for i in range(spd._height):
@@ -179,7 +198,7 @@ class scenery:
                 else:
                     a = random.randint(prevx_coins, right)
                 b = random.randint(4, self._coins_limit)
-                prevx_coins = a + 2
+                prevx_coins = a + 5
                 spd = dragon(a, b, speedboost_frame)
                 self._dragon.append(spd)
                 for i in range(spd._height):
@@ -193,11 +212,53 @@ class scenery:
                 self._grid[b-1][a+1] = spd._transp
                 self._grid[b-1][a+2] = spd._transp
 
+    def change_grid(self, i, j, val):
+        self._grid[i][j] = val
+
+    def change_speedboostactive(self, val):
+        self._speedboost_active = val
+
+    def get_grid(self, i, j):
+        return self._grid[i][j]
+
+    def get_mgntposx(self):
+        return self._mgnt_pos_x
+
+    def get_mgntposy(self):
+        return self._mgnt_pos_y
+
+    def get_mgntrangex(self):
+        return self._mgnt_rangex
+
+    def get_magnet(self):
+        return self._magnet
+
+    def get_flames(self):
+        return self._flames
+
+    def get_speedboost(self):
+        return self._speedboost
+
+    def get_dragon(self):
+        return self._dragon
+
+    def get_speedboostactive(self):
+        return self._speedboost_active
+
+    def get_clouds(self):
+        return self._clouds
+
     def object(self, object):
         for y in range(0, object._height):
             for x in range(0, object._width):
                 self._grid[object._pos_y - y][object._pos_x +
                                               x] = object._color + object._char[object._height - 1 - y][x]
+
+    def objectc(self, object):
+        for y in range(0, object._height):
+            for x in range(0, object._width):
+                self._grid[object._pos_y - y][object._pos_x +
+                                              x] = object._color + object._char
 
     def objectp(self, object):
         for y in range(0, object._height):
