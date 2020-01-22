@@ -49,7 +49,7 @@ class scenery:
 
             while(no_of_coins != 0 and no_of_flames != 0):
                 # CLOUDS
-                if ind != magnet_frame and ind != speedboost_frame and ind != dragon_frame:
+                if abs(ind - magnet_frame) >= 1 and abs(ind - speedboost_frame) >= 1 and abs(ind - dragon_frame) >= 1:
                     if no_of_clouds != 0:
                         a = prevx_coins
                         b = 7
@@ -59,7 +59,7 @@ class scenery:
                             for col in range(cloud._width):
                                 self._grid[b - row][a +
                                                     col] = cloud._color + cloud._char[cloud._height - 1 - row][col]
-                        prevx_coins = a + cloud._width * 2 + 1
+                        prevx_coins = a + cloud._width + 2
                         no_of_clouds -= 1
 
                 # COINS
@@ -149,7 +149,7 @@ class scenery:
                 else:
                     a = random.randint(prevx_coins, right)
                 b = random.randint(4, self._coins_limit)
-                prevx_coins = a + 6
+                prevx_coins = a + 7
                 self._mgnt_frame = magnet_frame
                 self._mgnt_rangex = 40
                 self._mgnt_pos_x = a
@@ -177,7 +177,7 @@ class scenery:
                 else:
                     a = random.randint(prevx_coins, right)
                 b = random.randint(4, self._coins_limit)
-                prevx_coins = a + 5
+                prevx_coins = a + 7
                 spd = speedboost(a, b, speedboost_frame)
                 self._speedboost.append(spd)
                 for i in range(spd._height):
@@ -198,7 +198,7 @@ class scenery:
                 else:
                     a = random.randint(prevx_coins, right)
                 b = random.randint(4, self._coins_limit)
-                prevx_coins = a + 5
+                prevx_coins = a + 7
                 spd = dragon(a, b, speedboost_frame)
                 self._dragon.append(spd)
                 for i in range(spd._height):
