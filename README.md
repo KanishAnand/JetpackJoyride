@@ -1,6 +1,6 @@
 # Jetpack Joyride
 
-This is an amazing implementation of a subset of the Jetpack Joyride game. This is implemented from scratch without use of PyGame library. Only numpy and colorama are the major libraries used. All characters of the game are made using ASCII characters. You will most probably enjoy it.
+This is an amazing implementation of a subset of the Jetpack Joyride game. This is implemented from scratch without use of PyGame library. Only numpy and colorama are the major libraries used. All characters of the game are made using ASCII characters. You will most probably enjoy it :smiley:.
 
 ## Running
 1. Install the requirements using command :
