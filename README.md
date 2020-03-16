@@ -2,6 +2,12 @@
 
 This is an amazing implementation of a subset of the Jetpack Joyride game. You will most probably enjoy it.
 
+## Running
+1. Install the requirements using command :
+ `pip3 install requirements.txt`
+2. Run game using
+` python3 main.py`
+
 ## Instructions
 
 1. 'WAD' to move.
