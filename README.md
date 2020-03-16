@@ -20,6 +20,7 @@ This is an amazing implementation of a subset of the Jetpack Joyride game. This 
 4. Kill the final Boss-Enemy to win the game.
 
 ![img](JetpackJoyride.png)
+![img](JetpackJoyrideDragon.png)
 
 ## Assignment related stuff
 
