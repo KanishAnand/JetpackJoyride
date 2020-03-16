@@ -4,7 +4,12 @@ This is an amazing implementation of a subset of the Jetpack Joyride game. You w
 
 ## Instructions
 
-1. WAD to move, fire bullets with b, activate shield with Space.
+1. 'WAD' to move.
+2. Fire Bullets with 'b'.
+3. Activate shield with 'Space'.
+2. Grab the Speed-Boost Powerup by jumping on it.
+3. You can become a dragon too by taking Special Dragon Powerup.
+4. Kill the final Boss-Enemy to win the game.
 
 ## Assignment related stuff
 
