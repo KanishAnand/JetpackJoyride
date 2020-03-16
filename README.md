@@ -1,4 +1,4 @@
-# Jetpack joyride
+# Jetpack Joyride
 
 This is an amazing implementation of a subset of the Jetpack Joyride game. You will most probably enjoy it.
 
