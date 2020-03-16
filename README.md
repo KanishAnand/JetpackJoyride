@@ -10,9 +10,9 @@ This is an amazing implementation of a subset of the Jetpack Joyride game. This 
 
 ## Instructions
 
-1. 'WAD' to move.
-2. Fire Bullets with 'b'.
-3. Activate shield with 'Space'.
+1. `WAD` to move.
+2. Fire Bullets with `b`.
+3. Activate shield with `Space`.
 4. You get 3 lives in the game.
 5. Increase your score by taking coins,hitting fire-beams and killing enemies.
 2. Grab the Speed-Boost Powerup by jumping on it.
