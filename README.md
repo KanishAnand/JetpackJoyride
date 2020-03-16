@@ -1,5 +1,3 @@
-# 2018101025
-
 # Jetpack joyride
 
 This is an amazing implementation of a subset of the Jetpack Joyride game. You will most probably enjoy it.
